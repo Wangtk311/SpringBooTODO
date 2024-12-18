@@ -1,4 +1,4 @@
-name: Springboot CI with JDK 21
+name: Spring Boot CI with JDK 21
 
 on:
   push:
@@ -11,17 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: todo
-          MYSQL_USER: TODOJAVA
-          MYSQL_PASSWORD: 123456
-        options: --health-cmd='mysqladmin ping --silent' --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - uses: actions/checkout@v3
@@ -41,7 +30,7 @@ jobs:
 
     - name: Set up environment variables for MySQL
       env:
-        MYSQL_HOST: mysql
+        MYSQL_HOST: 47.99.66.142
         MYSQL_PORT: 3306
         MYSQL_USER: TODOJAVA
         MYSQL_PASSWORD: 123456
