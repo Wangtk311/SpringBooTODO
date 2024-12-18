@@ -7,10 +7,10 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <!-- Navigation items -->
                         <li class="nav-item">
-                            <a href="/" class="nav-link">Home</a>
+                            <a href="/" class="nav-link">所有待办</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/add" class="nav-link">Add Todo</a>
+                            <a href="/add" class="nav-link">添加新待办</a>
                         </li>
                     </ul>
                 </div>
