@@ -28,6 +28,15 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
 
+    - name: Set up environment variables for MySQL
+      env:
+        MYSQL_HOST: 47.99.66.142
+        MYSQL_PORT: 3306
+        MYSQL_USER: TODOJAVA
+        MYSQL_PASSWORD: 123456
+        MYSQL_DATABASE: todo
+      run: echo "MYSQL environment variables are set"
+
     - name: Build and Test
       working-directory: backend/
       run: mvn -B package --file pom.xml
