@@ -1,14 +1,14 @@
 package com.javaee.springbootodo.service;
 
+import com.javaee.springbootodo.entity.TodoEntity;
 import com.javaee.springbootodo.repository.TodoRepository;
-import com.javaee.springbootodo.entity.TodoEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-// Service implementation for handling TodoEntry operations
+// Service implementation for handling TodoEntity operations
 @Service
 public class TodoServiceImpl implements TodoService {
 
@@ -22,16 +22,21 @@ public class TodoServiceImpl implements TodoService {
 
     // Retrieve all Todo entries
     @Override
-    public List<TodoEntry> findAll() {
+    public List<TodoEntity> findAll() {
         return todoRepository.findAll();
+    }
+
+    @Override
+    public List<TodoEntity> findAllByUserId(int theUserId) {
+        return todoRepository.findAllByUserid(theUserId);
     }
 
     // Retrieve a Todo entry by its ID
     @Override
-    public TodoEntry findById(int theId) {
-        Optional<TodoEntry> result = todoRepository.findById(theId);
+    public TodoEntity findById(int theId) {
+        Optional<TodoEntity> result = todoRepository.findById(theId);
 
-        TodoEntry theTodo = null;
+        TodoEntity theTodo = null;
 
         if (result.isPresent()) {
             theTodo = result.get();
@@ -45,7 +50,7 @@ public class TodoServiceImpl implements TodoService {
 
     // Save or update a Todo entry
     @Override
-    public TodoEntry save(TodoEntry theTodo) {
+    public TodoEntity save(TodoEntity theTodo) {
         return todoRepository.save(theTodo);
     }
 

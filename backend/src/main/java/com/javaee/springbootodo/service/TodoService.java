@@ -1,19 +1,21 @@
 package com.javaee.springbootodo.service;
 
-import com.javaee.springbootodo.entity.TodoEntry;
+import com.javaee.springbootodo.entity.TodoEntity;
 import java.util.List;
 
-// Service for handling TodoEntry operations
+// Service for handling TodoEntity operations
 public interface TodoService {
 
     // Retrieve all Todo entries
-    List<TodoEntry> findAll();
+    List<TodoEntity> findAll();
+
+    List<TodoEntity> findAllByUserId(int theUserId);
 
     // Retrieve a Todo entry by its ID
-    TodoEntry findById(int theId);
+    TodoEntity findById(int theId);
 
     // Save a Todo entry (create or update)
-    TodoEntry save(TodoEntry theTodo);
+    TodoEntity save(TodoEntity theTodo);
 
     // Delete a Todo entry by its ID
     void deleteById(int theId);

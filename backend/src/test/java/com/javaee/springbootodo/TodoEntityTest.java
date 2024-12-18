@@ -1,19 +1,19 @@
 package com.javaee.springbootodo;
 
-import com.javaee.springbootodo.entity.TodoEntry;
+import com.javaee.springbootodo.entity.TodoEntity;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Class for Unit tests for TodoEntry class
-public class TodoEntryTest {
+// Class for Unit tests for TodoEntity class
+public class TodoEntityTest {
 
-    // Test the creation and initialization of a TodoEntry object using the constructor
+    // Test the creation and initialization of a TodoEntity object using the constructor
     @Test
     void testTodoEntryCreation() {
         LocalDate date = LocalDate.now();
-        TodoEntry todo = new TodoEntry("Title", "Description", "High", date, false);
+        TodoEntity todo = new TodoEntity("Title", "Description", "High", date, false);
 
         assertEquals("Title", todo.getTitle());
         assertEquals("Description", todo.getDescription());
@@ -22,11 +22,11 @@ public class TodoEntryTest {
         assertFalse(todo.isCompleted());
     }
 
-    // Test the setters of the TodoEntry class
+    // Test the setters of the TodoEntity class
     @Test
     void testTodoEntrySetters() {
         LocalDate date = LocalDate.now();
-        TodoEntry todo = new TodoEntry();
+        TodoEntity todo = new TodoEntity();
 
         // Set values using setters
         todo.setId(1);

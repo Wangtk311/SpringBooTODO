@@ -8,7 +8,7 @@ import java.time.LocalDate;
 // Entity class for a Todo entry in the database
 @Entity
 @Table(name="todo")
-public class TodoEntry {
+public class TodoEntity {
 
     // Unique identifier for the Todo entry, auto-generated
     @Id
@@ -42,17 +42,22 @@ public class TodoEntry {
     @Column(name="completed")
     private boolean completed;
 
+    @NotNull
+    @Column(name="userid")
+    private int userid;
+
     // Default constructor for JPA
-    public TodoEntry() {
+    public TodoEntity() {
     }
 
-    // Constructor to initialize TodoEntry with title, description, priority, date, completion status
-    public TodoEntry(String title, String description, String priority, LocalDate date, boolean completed) {
+    // Constructor to initialize TodoEntity with title, description, priority, date, completion status
+    public TodoEntity(String title, String description, String priority, LocalDate date, boolean completed, int userid) {
         this.title = title;
         this.description = description;
         this.priority = priority;
         this.date = date;
         this.completed = completed;
+        this.userid = userid;
     }
 
     // Get the date of the Todo entry
@@ -115,14 +120,25 @@ public class TodoEntry {
         this.completed = completed;
     }
 
-    // Return a string representation of the TodoEntry object
+    // Get the userid of the Todo entry
+    public int getUserid() {
+        return userid;
+    }
+
+    // Set the userid of the Todo entry
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+
+    // Return a string representation of the TodoEntity object
     @Override
     public String toString() {
-        return "TodoEntry{" +
+        return "TodoEntity{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", completed=" + completed +
+                ", completed=" + completed + '\'' +
+                ", userid=" + userid +
                 '}';
     }
 }

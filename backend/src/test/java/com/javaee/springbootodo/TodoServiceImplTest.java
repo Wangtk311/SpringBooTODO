@@ -1,7 +1,7 @@
 package com.javaee.springbootodo;
 
+import com.javaee.springbootodo.entity.TodoEntity;
 import com.javaee.springbootodo.repository.TodoRepository;
-import com.javaee.springbootodo.entity.TodoEntry;
 import com.javaee.springbootodo.service.TodoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,15 +38,15 @@ public class TodoServiceImplTest {
     // Test the findAll method of TodoServiceImpl
     @Test
     void testFindAll() {
-        // Create sample TodoEntry objects
-        TodoEntry todo1 = new TodoEntry("Title1", "Description1", "High", LocalDate.now(), false);
-        TodoEntry todo2 = new TodoEntry("Title2", "Description2", "Low", LocalDate.now(), true);
+        // Create sample TodoEntity objects
+        TodoEntity todo1 = new TodoEntity("Title1", "Description1", "High", LocalDate.now(), false);
+        TodoEntity todo2 = new TodoEntity("Title2", "Description2", "Low", LocalDate.now(), true);
 
         // Mock the behavior of todoRepository.findAll() to return the sample Todos
         when(todoRepository.findAll()).thenReturn(Arrays.asList(todo1, todo2));
 
         // Call the findAll method of the service
-        List<TodoEntry> todos = todoService.findAll();
+        List<TodoEntity> todos = todoService.findAll();
 
         // Verify that the result is not null and contains the expected number of Todos
         assertNotEquals(todos, null);
@@ -56,14 +56,14 @@ public class TodoServiceImplTest {
     // Test the findById method of TodoServiceImpl
     @Test
     void testFindById() {
-        // Create a sample TodoEntry object
-        TodoEntry todo = new TodoEntry("Title", "Description", "Medium", LocalDate.now(), false);
+        // Create a sample TodoEntity object
+        TodoEntity todo = new TodoEntity("Title", "Description", "Medium", LocalDate.now(), false);
 
         // Mock the behavior of todoRepository.findById() to return the sample Todo wrapped in Optional
         when(todoRepository.findById(1)).thenReturn(Optional.of(todo));
 
         // Call the findById method of the service
-        TodoEntry result = todoService.findById(1);
+        TodoEntity result = todoService.findById(1);
 
         // Verify that the result is not null and has the expected title
         assertNotNull(result);
@@ -73,14 +73,14 @@ public class TodoServiceImplTest {
     // Test the save method of TodoServiceImpl
     @Test
     void testSave() {
-        // Create a sample TodoEntry object
-        TodoEntry todo = new TodoEntry("Title", "Description", "Medium", LocalDate.now(), false);
+        // Create a sample TodoEntity object
+        TodoEntity todo = new TodoEntity("Title", "Description", "Medium", LocalDate.now(), false);
 
         // Mock the behavior of todoRepository.save() to return the same Todo
         when(todoRepository.save(todo)).thenReturn(todo);
 
         // Call the save method of the service
-        TodoEntry result = todoService.save(todo);
+        TodoEntity result = todoService.save(todo);
 
         // Verify that the result is not null and has the expected title
         assertNotNull(result);
@@ -90,8 +90,8 @@ public class TodoServiceImplTest {
     // Test the deleteById method of TodoServiceImpl
     @Test
     void testDeleteById() {
-        // Create a sample TodoEntry object with ID 1
-        TodoEntry todo = new TodoEntry("Title", "Description", "Medium", LocalDate.now(), false);
+        // Create a sample TodoEntity object with ID 1
+        TodoEntity todo = new TodoEntity("Title", "Description", "Medium", LocalDate.now(), false);
         todo.setId(1);
 
         // Mock the behavior of todoRepository.findById() to return the sample Todo
@@ -107,7 +107,7 @@ public class TodoServiceImplTest {
         when(todoRepository.findAll()).thenReturn(Collections.emptyList());
 
         // Check if the repository is empty
-        List<TodoEntry> todos = todoService.findAll();
+        List<TodoEntity> todos = todoService.findAll();
         assertEquals(0, todos.size());
     }
 }
