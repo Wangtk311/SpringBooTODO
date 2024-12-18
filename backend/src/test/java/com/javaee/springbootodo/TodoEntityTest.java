@@ -13,7 +13,7 @@ public class TodoEntityTest {
     @Test
     void testTodoEntryCreation() {
         LocalDate date = LocalDate.now();
-        TodoEntity todo = new TodoEntity("Title", "Description", "High", date, false);
+        TodoEntity todo = new TodoEntity("Title", "Description", "High", date, false, 111111);
 
         assertEquals("Title", todo.getTitle());
         assertEquals("Description", todo.getDescription());
