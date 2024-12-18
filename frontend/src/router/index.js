@@ -1,15 +1,24 @@
 // Import Vue Router functions and components
 import { createRouter, createWebHistory } from 'vue-router';
-import ViewTodos from '../views/ViewTodos.vue';
 
 // Create and configure the router
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), // Use HTML5 History API
   routes: [
     {
-      path: '/', // Root path
+      path: '/login', // Path for the login page
+      name: 'login', // Route name
+      component: () => import('../views/Login.vue') // Lazy-load component
+    },
+    {
+      path: '/register', // Path for the register page
+      name: 'register', // Route name
+      component: () => import('../views/Register.vue') // Lazy
+    },
+    {
+      path: '/home', // Root path
       name: 'home', // Route name
-      component: ViewTodos // Component for this route
+      component: () => import('../views/ViewTodo.vue') // Component for this route
     },
     {
       path: '/add', // Path for adding a new todo

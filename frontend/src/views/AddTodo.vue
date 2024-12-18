@@ -3,7 +3,7 @@
         <Navbar/>   
         <div class="my-5">
             <div class="mx-auto" style="max-width: 500px; width: 100%;">
-                <h1 class="text-center mb-4">Add Todo</h1>            
+                <h1 class="text-center mb-4">添加新待办</h1>
                 <form @submit.prevent="addTodo">
                     <!-- Hidden ID Field -->
                     <input type="hidden" v-model="todo.id">
@@ -11,8 +11,8 @@
                     <!-- Title -->
                     <div class="row">
                         <div class="col-md-12 form-group mb-3">
-                            <label for="title" class="form-label" style="font-weight: bold;">Title</label>     
-                            <input type="text" name="title" id="title" class="form-control" placeholder="Title" required v-model="todo.title">                   
+                            <label for="title" class="form-label" style="font-weight: bold;">待办标题</label>
+                            <input type="text" name="title" id="title" class="form-control" placeholder="待办标题" required v-model="todo.title">
                             <span class="text-danger" v-if="errors.title">{{ errors.title }}</span>
                         </div>
                     </div>
@@ -20,8 +20,8 @@
                     <!-- Description -->
                     <div class="row">
                         <div class="col-md-12 form-group mb-3">
-                            <label for="description" class="form-label" style="font-weight: bold;">Description</label>     
-                            <input type="text" name="description" id="description" class="form-control" placeholder="Description" required v-model="todo.description">                   
+                            <label for="description" class="form-label" style="font-weight: bold;">待办内容</label>
+                            <input type="text" name="description" id="description" class="form-control" placeholder="待办内容" required v-model="todo.description">
                             <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                     <!-- Date Field -->
                     <div class="row">
                         <div class="col-md-12 form-group mb-3">
-                            <label for="date" class="form-label" style="font-weight: bold;">Date</label>
+                            <label for="date" class="form-label" style="font-weight: bold;">截止日期</label>
                             <input type="date" name="date" id="date" class="form-control" required v-model="todo.date"/>
                             <span class="text-danger" v-if="errors.date">{{ errors.date }}</span>
                         </div>
@@ -38,11 +38,11 @@
                      <!-- Priority Field -->
                      <div class="row">
                         <div class="col-md-12 form-group mb-3">
-                            <label for="priority" class="form-label" style="font-weight: bold;">Priority</label>
+                            <label for="priority" class="form-label" style="font-weight: bold;">优先级</label>
                             <select name="priority" id="priority" class="form-control" v-model="todo.priority">
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
+                                <option value="低">低</option>
+                                <option value="中">中</option>
+                                <option value="高">高</option>
                             </select>
                             <span class="text-danger" v-if="errors.priority">{{ errors.priority }}</span>
                         </div>
@@ -53,7 +53,7 @@
                 
                      <!-- Submit Button -->
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        <button type="submit" class="btn btn-primary w-100">确认</button>
                     </div>
                     
                     <!-- Success/Error Message -->
@@ -87,7 +87,7 @@ export default {
                 title: '',
                 description: '',
                 date: '',
-                priority: 'Low', // Default priority
+                priority: '低', // Default priority
                 completed: 'false' // Default completed
             },
             errors: {},
@@ -104,34 +104,34 @@ export default {
 
         // Title validation
         if (!this.todo.title.trim()) {
-            this.errors.title = 'Title is required.';
+            this.errors.title = '必须提供一个标题';
             isValid = false;
         } else if (this.todo.title.length < 2) {
-            this.errors.title = 'Title must have more than 1 character.';
+            this.errors.title = '标题不能少于两个字符';
             isValid = false;
         }
 
         // Description validation
         if (!this.todo.description.trim()) {
-            this.errors.description = 'Description is required.';
+            this.errors.description = '必须提供一段内容';
             isValid = false;
         } else if (this.todo.description.length < 3) {
-            this.errors.description = 'Description must have more than 2 characters.';
+            this.errors.description = '内容不能少于三个字符';
             isValid = false;
         }
 
         // Date validation
         if (!this.todo.date) {
-            this.errors.date = 'Date is required.';
+            this.errors.date = '必须提供一个截止日期';
             isValid = false;
         } else if (new Date(this.todo.date) < new Date()) {
-            this.errors.date = 'Date cannot be in the past.';
+            this.errors.date = '不能选择过去的时间';
             isValid = false;
         }
 
         // Priority validation (optional)
         if (!this.todo.priority) {
-            this.errors.priority = 'Priority is required.';
+            this.errors.priority = '必须指定一个优先级';
             isValid = false;
         }
 
@@ -159,7 +159,7 @@ export default {
             .then(data => {
                 this.successMessage = 'Todo added successfully!';   // Success message
                 this.errorMessage = ''; // Clear any previous errors
-                this.$router.push("/"); // Redirect to the home page
+                this.$router.push("/home"); // Redirect to the home page
             })  
             .catch(error => {
                 this.errorMessage = 'Error adding todo: ' + error.message;  // Error message

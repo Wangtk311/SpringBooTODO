@@ -39,8 +39,8 @@ public class TodoServiceImplTest {
     @Test
     void testFindAll() {
         // Create sample TodoEntity objects
-        TodoEntity todo1 = new TodoEntity("Title1", "Description1", "High", LocalDate.now(), false, 111111);
-        TodoEntity todo2 = new TodoEntity("Title2", "Description2", "Low", LocalDate.now(), true, 111111);
+        TodoEntity todo1 = new TodoEntity("Title1", "Description1", "高", LocalDate.now(), false, 111111);
+        TodoEntity todo2 = new TodoEntity("Title2", "Description2", "低", LocalDate.now(), true, 111111);
 
         // Mock the behavior of todoRepository.findAll() to return the sample Todos
         when(todoRepository.findAll()).thenReturn(Arrays.asList(todo1, todo2));
@@ -57,7 +57,7 @@ public class TodoServiceImplTest {
     @Test
     void testFindById() {
         // Create a sample TodoEntity object
-        TodoEntity todo = new TodoEntity("Title", "Description", "Medium", LocalDate.now(), false, 111111);
+        TodoEntity todo = new TodoEntity("Title", "Description", "中", LocalDate.now(), false, 111111);
 
         // Mock the behavior of todoRepository.findById() to return the sample Todo wrapped in Optional
         when(todoRepository.findById(1)).thenReturn(Optional.of(todo));
@@ -74,7 +74,7 @@ public class TodoServiceImplTest {
     @Test
     void testSave() {
         // Create a sample TodoEntity object
-        TodoEntity todo = new TodoEntity("Title", "Description", "Medium", LocalDate.now(), false, 111111);
+        TodoEntity todo = new TodoEntity("Title", "Description", "中", LocalDate.now(), false, 111111);
 
         // Mock the behavior of todoRepository.save() to return the same Todo
         when(todoRepository.save(todo)).thenReturn(todo);
@@ -91,7 +91,7 @@ public class TodoServiceImplTest {
     @Test
     void testDeleteById() {
         // Create a sample TodoEntity object with ID 1
-        TodoEntity todo = new TodoEntity("Title", "Description", "Medium", LocalDate.now(), false, 111111);
+        TodoEntity todo = new TodoEntity("Title", "Description", "中", LocalDate.now(), false, 111111);
         todo.setId(1);
 
         // Mock the behavior of todoRepository.findById() to return the sample Todo

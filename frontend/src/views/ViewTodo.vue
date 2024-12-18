@@ -7,8 +7,8 @@
         <div class="full-width-container">
             
             <!-- Header and add button -->
-            <h1 class="text-center mb-4">View Todos</h1>
-            <a href="/add" class="btn btn-primary mb-3">Add Todo</a>
+            <h1 class="text-center mb-4">查看待办</h1>
+            <a href="/add" class="btn btn-primary mb-3">添加新待办</a>
             
             <!-- Scrollable container for the table -->
             <div class="table-container" v-if="todos.length > 0">
@@ -17,12 +17,12 @@
                     <thead>
                         <tr>
                             <!-- Table headers -->
-                            <th scope="col" style="font-weight: bold;">Title</th>
-                            <th scope="col" style="font-weight: bold;">Description</th>
-                            <th scope="col" style="font-weight: bold;">Date</th>
-                            <th scope="col" style="font-weight: bold;">Priority</th>
-                            <th scope="col" style="font-weight: bold;">Completed</th>
-                            <th scope="col" style="font-weight: bold;">Actions</th>
+                            <th scope="col" style="font-weight: bold;">待办标题</th>
+                            <th scope="col" style="font-weight: bold;">待办内容</th>
+                            <th scope="col" style="font-weight: bold;">截止时间</th>
+                            <th scope="col" style="font-weight: bold;">优先级</th>
+                            <th scope="col" style="font-weight: bold;">是否完成</th>
+                            <th scope="col" style="font-weight: bold;">操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,8 +42,8 @@
                             </td>
                             <td>
                                 <!-- Buttons for editing and deleting a todo -->
-                                <a class="btn btn-primary" :href="`/edit/${todo.id}`">Edit</a>
-                                <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">Delete</button>
+                                <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+                                <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
                             </td>
                         </tr>
                     </tbody>
@@ -131,11 +131,11 @@ export default {
          // Method to return the class based on priority
          priorityClass(priority) {
             switch (priority) {
-                case 'High':
+                case '高':
                     return 'priority-high';
-                case 'Medium':
+                case '中':
                     return 'priority-medium';
-                case 'Low':
+                case '低':
                     return 'priority-low';
                 default:
                     return '';

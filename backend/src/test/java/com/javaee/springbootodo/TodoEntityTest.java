@@ -13,11 +13,11 @@ public class TodoEntityTest {
     @Test
     void testTodoEntryCreation() {
         LocalDate date = LocalDate.now();
-        TodoEntity todo = new TodoEntity("Title", "Description", "High", date, false, 111111);
+        TodoEntity todo = new TodoEntity("Title", "Description", "高", date, false, 111111);
 
         assertEquals("Title", todo.getTitle());
         assertEquals("Description", todo.getDescription());
-        assertEquals("High", todo.getPriority());
+        assertEquals("高", todo.getPriority());
         assertEquals(date, todo.getDate());
         assertFalse(todo.isCompleted());
     }
@@ -32,7 +32,7 @@ public class TodoEntityTest {
         todo.setId(1);
         todo.setTitle("New Title");
         todo.setDescription("New Description");
-        todo.setPriority("Low");
+        todo.setPriority("低");
         todo.setDate(date);
         todo.setCompleted(true);
 
@@ -40,7 +40,7 @@ public class TodoEntityTest {
         assertEquals(1, todo.getId());
         assertEquals("New Title", todo.getTitle());
         assertEquals("New Description", todo.getDescription());
-        assertEquals("Low", todo.getPriority());
+        assertEquals("低", todo.getPriority());
         assertEquals(date, todo.getDate());
         assertTrue(todo.isCompleted());
     }
