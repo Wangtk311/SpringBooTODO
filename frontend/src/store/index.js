@@ -54,7 +54,19 @@ const store = createStore({
     },
     getters: {
         // 判断用户是否已登录
-        isAuthenticated: (state) => !!state.token,
+        isAuthenticated: (state) => {
+            return async (state) => {
+                const response = await fetch('http://localhost:8080/user/tokencheck', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                return response.ok;
+            }
+        },
         getUserId: (state) => state.userId,
         getToken: (state) => state.token,
     }
