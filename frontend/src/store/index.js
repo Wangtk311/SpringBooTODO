@@ -3,8 +3,8 @@ import { createStore } from 'vuex';
 
 const store = createStore({
     state: {
-        userId: null,
-        token: null,
+        userId: localStorage.getItem('user-id') || null,  // 从 localStorage 获取
+        token: localStorage.getItem('jwt-token') || null,  // 从 localStorage 获取
     },
     mutations: {
         // 设置用户信息和 token
@@ -41,6 +41,10 @@ const store = createStore({
                 commit('setUser', { userId, token });
             } else {
                 console.error('登录失败，服务器认证未通过。');
+                this.state.userId = null;
+                this.state.token = null;
+                localStorage.removeItem('user-id');  // 从 localStorage 移除
+                localStorage.removeItem('jwt-token');  // 从 localStorage 移除
             }
         },
         // 登出操作
