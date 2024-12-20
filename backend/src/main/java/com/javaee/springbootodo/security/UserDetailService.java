@@ -26,6 +26,7 @@ public class UserDetailService implements UserDetailsService {
             // 用户被授予的所有权限集合
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
+                System.out.println("getAuthorities");
                 Set<GrantedAuthority> authorities = new HashSet<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));

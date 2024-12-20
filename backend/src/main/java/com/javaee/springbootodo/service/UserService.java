@@ -21,4 +21,6 @@ public interface UserService {
 
     //获取userid
     int getId(UserEntity theUser);
+
+    String getPassword(UserEntity user);
 }
