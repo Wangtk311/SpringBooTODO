@@ -1,76 +1,76 @@
 <template>
-    <main>
-        <Navbar />  <!-- Import and use Navbar component -->
-        <div class="my-5">
-            <div class="mx-auto" style="max-width: 500px; width: 100%;">
-                <h1 class="text-center mb-4">更新待办</h1>   <!-- Heading for the update page -->
-                <form @submit.prevent="updateTodo">
-                    <!-- Title Field -->
-                    <div class="row">
-                        <div class="col-md-12 form-group mb-3">
-                            <label for="title" class="form-label" style="font-weight: bold;">待办标题</label>
-                            <input type="text" name="title" id="title" class="form-control" placeholder="待办标题" required v-model="todo.title"/>
-                            <span class="text-danger" v-if="errors.title">{{ errors.title }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Description Field -->
-                    <div class="row">
-                        <div class="col-md-12 form-group mb-3">
-                            <label for="description" class="form-label" style="font-weight: bold;">待办内容</label>
-                            <input type="text" name="description" id="description" class="form-control" placeholder="待办内容" required v-model="todo.description"/>
-                            <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
-                        </div>
-                    </div>
-
-                     <!-- Date Field -->
-                     <div class="row">
-                        <div class="col-md-12 form-group mb-3">
-                            <label for="date" class="form-label" style="font-weight: bold;">截止日期</label>
-                            <input type="date" name="date" id="date" class="form-control" required v-model="todo.date"/>
-                            <span class="text-danger" v-if="errors.date">{{ errors.date }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Priority Field -->
-                    <div class="row">
-                        <div class="col-md-12 form-group mb-3">
-                            <label for="priority" class="form-label" style="font-weight: bold;">优先级</label>
-                            <select name="priority" id="priority" class="form-control" v-model="todo.priority">
-                                <option value="Low">低</option>
-                                <option value="Medium">中</option>
-                                <option value="High">高</option>
-                            </select>
-                            <span class="text-danger" v-if="errors.priority">{{ errors.priority }}</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Completed Checkbox -->
-                    <div class="row">
-                        <div class="col-md-12 form-group mb-3">
-                            <label for="completed" class="form-label" style="font-weight: bold;">标记为已完成</label>
-                            <div class="checkbox-container">
-                                <input type="checkbox" class="large-checkbox" id="completed" v-model="todo.completed"/>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Submit Button -->
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary w-100">确认</button>
-                    </div>
-                    
-                    <!-- Success/Error Message -->
-                    <div v-if="successMessage" class="alert alert-success">
-                        {{ successMessage }}
-                    </div>
-                    <div v-if="errorMessage" class="alert alert-danger">
-                        {{ errorMessage }}
-                    </div>
-                </form>
+  <main>
+    <Navbar />  <!-- Import and use Navbar component -->
+    <div class="my-5">
+      <div class="mx-auto" style="max-width: 500px; width: 100%;">
+        <h1 class="text-center mb-4">更新待办</h1>   <!-- Heading for the update page -->
+        <form @submit.prevent="updateTodo">
+          <!-- Title Field -->
+          <div class="row">
+            <div class="col-md-12 form-group mb-3">
+              <label for="title" class="form-label" style="font-weight: bold;">待办标题</label>
+              <input type="text" name="title" id="title" class="form-control" placeholder="待办标题" required v-model="todo.title"/>
+              <span class="text-danger" v-if="errors.title">{{ errors.title }}</span>
             </div>
-        </div>
-    </main>
+          </div>
+
+          <!-- Description Field -->
+          <div class="row">
+            <div class="col-md-12 form-group mb-3">
+              <label for="description" class="form-label" style="font-weight: bold;">待办内容</label>
+              <input type="text" name="description" id="description" class="form-control" placeholder="待办内容" required v-model="todo.description"/>
+              <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
+            </div>
+          </div>
+
+          <!-- Date Field -->
+          <div class="row">
+            <div class="col-md-12 form-group mb-3">
+              <label for="date" class="form-label" style="font-weight: bold;">截止日期</label>
+              <input type="date" name="date" id="date" class="form-control" required v-model="todo.date"/>
+              <span class="text-danger" v-if="errors.date">{{ errors.date }}</span>
+            </div>
+          </div>
+
+          <!-- Priority Field -->
+          <div class="row">
+            <div class="col-md-12 form-group mb-3">
+              <label for="priority" class="form-label" style="font-weight: bold;">优先级</label>
+              <select name="priority" id="priority" class="form-control" v-model="todo.priority">
+                <option value="Low">低</option>
+                <option value="Medium">中</option>
+                <option value="High">高</option>
+              </select>
+              <span class="text-danger" v-if="errors.priority">{{ errors.priority }}</span>
+            </div>
+          </div>
+
+          <!-- Completed Checkbox -->
+          <div class="row">
+            <div class="col-md-12 form-group mb-3">
+              <label for="completed" class="form-label" style="font-weight: bold;">标记为已完成</label>
+              <div class="checkbox-container">
+                <input type="checkbox" class="large-checkbox" id="completed" v-model="todo.completed"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary w-100">确认</button>
+          </div>
+
+          <!-- Success/Error Message -->
+          <div v-if="successMessage" class="alert alert-success">
+            {{ successMessage }}
+          </div>
+          <div v-if="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -84,12 +84,12 @@ const router = useRouter();
 
 // Reactive variable for the todo object with Record type
 const todo = ref<Record<string, any>>({
-    id: '',
-    title: '',
-    description: '',
-    date: '',
-    priority: '',
-    completed: false 
+  id: '',
+  title: '',
+  description: '',
+  date: '',
+  priority: '',
+  completed: false
 });
 
 const errors = ref<Record<string, string>>({});
@@ -98,89 +98,89 @@ const errorMessage = ref<string>('');
 
 // Fetch todo details from the server
 const getTodo = async () => {
-    try {
-        const response = await fetch(`http://localhost:8080/todo/${route.params.id}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        todo.value = data;  // Update todo with fetched data
-        console.log(todo.value);  // Log todo data for debugging
-    } catch (error) {
-        console.error('Error fetching todo:', error);   // Log errors
-        errorMessage.value = 'Failed to fetch todo details.';
+  try {
+    const response = await fetch(`http://localhost:8080/todo/${route.params.id}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
+    const data = await response.json();
+    todo.value = data;  // Update todo with fetched data
+    console.log(todo.value);  // Log todo data for debugging
+  } catch (error) {
+    console.error('Error fetching todo:', error);   // Log errors
+    errorMessage.value = 'Failed to fetch todo details.';
+  }
 };
 
 // Validate form inputs
 const validateForm = () => {
-    errors.value = {};  // Reset errors
-    let isValid = true;
+  errors.value = {};  // Reset errors
+  let isValid = true;
 
-    // Title validation
-    if (!todo.value.title.trim()) {
-        errors.value.title = '必须提供一个标题';
-        isValid = false;
-    } else if (todo.value.title.length < 2) {
-        errors.value.title = '标题不能少于两个字符';
-        isValid = false;
-    }
+  // Title validation
+  if (!todo.value.title.trim()) {
+    errors.value.title = '必须提供一个标题';
+    isValid = false;
+  } else if (todo.value.title.length < 2) {
+    errors.value.title = '标题不能少于两个字符';
+    isValid = false;
+  }
 
-    // Description validation
-    if (!todo.value.description.trim()) {
-        errors.value.description = '必须提供一段内容';
-        isValid = false;
-    } else if (todo.value.description.length < 3) {
-        errors.value.description = '内容不能少于三个字符';
-        isValid = false;
-    }
+  // Description validation
+  if (!todo.value.description.trim()) {
+    errors.value.description = '必须提供一段内容';
+    isValid = false;
+  } else if (todo.value.description.length < 3) {
+    errors.value.description = '内容不能少于三个字符';
+    isValid = false;
+  }
 
-    // Date validation
-    if (!todo.value.date) {
-        errors.value.date = '必须提供一个截止日期';
-        isValid = false;
-    } else if (new Date(todo.value.date) <= new Date()) {
-        errors.value.date = '不能选择过去的时间';
-        isValid = false;
-    }
+  // Date validation
+  if (!todo.value.date) {
+    errors.value.date = '必须提供一个截止日期';
+    isValid = false;
+  } else if (new Date(todo.value.date) <= new Date()) {
+    errors.value.date = '不能选择过去的时间';
+    isValid = false;
+  }
 
-    // Priority validation
-    if (!todo.value.priority) {
-        errors.value.priority = '必须指定一个优先级';
-        isValid = false;
-    }
+  // Priority validation
+  if (!todo.value.priority) {
+    errors.value.priority = '必须指定一个优先级';
+    isValid = false;
+  }
 
-    return isValid;
+  return isValid;
 };
 
 // Update the todo on the server
 const updateTodo = async () => {
-    if (validateForm()) {
-        try {
-            const response = await fetch('http://localhost:8080/todo', {
-                method: 'PUT',  // HTTP method for updating existing todo
-                headers: {
-                    'Content-Type': 'application/json'  // Specify JSON content type
-                },
-                body: JSON.stringify(todo.value)    // Convert todo object to JSON
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            console.log(data);  // Log success message
-            successMessage.value = 'Todo updated successfully!';
-            errorMessage.value = ''; // Clear any previous errors
-            router.push('/home');   // Redirect to home page after successful update
-        } catch (error) {
-            errorMessage.value = 'Error updating todo: ' + error.message;
-            successMessage.value = ''; // Clear any previous success messages
-        }
+  if (validateForm()) {
+    try {
+      const response = await fetch('http://localhost:8080/todo', {
+        method: 'PUT',  // HTTP method for updating existing todo
+        headers: {
+          'Content-Type': 'application/json'  // Specify JSON content type
+        },
+        body: JSON.stringify(todo.value)    // Convert todo object to JSON
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log(data);  // Log success message
+      successMessage.value = 'Todo updated successfully!';
+      errorMessage.value = ''; // Clear any previous errors
+      router.push('/');   // Redirect to home page after successful update
+    } catch (error) {
+      errorMessage.value = 'Error updating todo: ' + error.message;
+      successMessage.value = ''; // Clear any previous success messages
     }
+  }
 };
 
 // Fetch todo details when component is mounted
 onMounted(() => {
-    getTodo();
+  getTodo();
 });
 </script>

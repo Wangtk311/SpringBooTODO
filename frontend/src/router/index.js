@@ -1,5 +1,6 @@
 // Import Vue Router functions and components
 import { createRouter, createWebHistory } from 'vue-router';
+import { useStore } from 'vuex'
 
 // Create and configure the router
 const router = createRouter({
@@ -16,21 +17,39 @@ const router = createRouter({
       component: () => import('../views/Register.vue') // Lazy
     },
     {
-      path: '/home', // Root path
+      path: '/', // Root path
       name: 'home', // Route name
-      component: () => import('../views/ViewTodo.vue') // Component for this route
+      component: () => import('../views/ViewTodo.vue'), // Component for this route
+      meta: { requiresAuth: true }
     },
     {
       path: '/add', // Path for adding a new todo
       name: 'add', // Route name
-      component: () => import('../views/AddTodo.vue') // Lazy-load component
+      component: () => import('../views/AddTodo.vue'), // Lazy-load component
+      meta: { requiresAuth: true }
     },
     {
       path: '/edit/:id', // Path for editing a specific todo
       name: 'edit', // Route name
-      component: () => import('../views/UpdateTodo.vue') // Lazy-load component
+      component: () => import('../views/UpdateTodo.vue'), // Lazy-load component
+      meta: { requiresAuth: true }
     }
   ]
+});
+
+// Add a navigation guard to check if the route requires authentication
+router.beforeEach((to, from, next) => {
+  console.log("To route:", to.name);
+  const store = useStore()
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isAuthenticated) {
+      next({ name: 'login' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 // Export the router instance

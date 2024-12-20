@@ -86,7 +86,7 @@ h2 {
 }
 
 .register-btn {
-  width:100px;
+  width: 100px;
   padding: 10px;
   font-size: 14px;
   color: white;

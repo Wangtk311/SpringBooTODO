@@ -3,8 +3,8 @@
     <div class="login-box">
       <h2>登录SpringBooTODO</h2>
       <div class="input-group">
-        <label for="username">账号</label>
-        <input type="text" id="username" v-model="username" placeholder="请输入账号" />
+        <label for="id">账号</label>
+        <input type="text" id="id" v-model="id" placeholder="请输入账号" />
       </div>
       <div class="input-group">
         <label for="password">密码</label>
@@ -18,23 +18,40 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Login',
-  data() {
-    return {
-      username: '',
-      password: ''
-    }
-  },
-  methods: {
-    login() {
-      this.$router.push('/home');
-    },
-    register() {
-      this.$router.push('/register');
-    }
+<script setup>
+// 引入 Vuex store
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+
+// 获取 Vuex store
+const store = useStore()
+
+// 定义表单输入字段
+const id = ref('')
+const password = ref('')
+
+// 登录处理函数
+const login = async () => {
+  if (!id.value || !password.value) {
+    alert('用户名和密码不能为空');
+    return;
   }
+
+  // 调用 Vuex 的 login action 进行登录
+  await store.dispatch('login', { id: id.value, password: password.value });
+
+  // 登录成功后可以进行跳转或其他操作
+  if (store.getters.isAuthenticated) {
+    window.location.href = '/';
+  } else {
+    alert('登录失败!');
+  }
+}
+
+// 注册处理函数
+const register = () => {
+  // 跳转到注册页面
+  window.location.href = '/register';
 }
 </script>
 

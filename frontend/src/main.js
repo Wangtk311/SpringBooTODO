@@ -8,12 +8,16 @@ import { createApp } from 'vue'
 import App from './App.vue'
 // Import the router configuration
 import router from './router'
+// Import the store
+import store from './store'
 
 // Create a Vue application instance with the App component
 const app = createApp(App)
 
 // Use the router in the Vue application
 app.use(router)
+// Use the store in the Vue application
+app.use(store)
 
 // Mount the Vue application to the DOM element with id 'app'
 app.mount('#app')
