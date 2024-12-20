@@ -7,6 +7,7 @@ import com.javaee.springbootodo.security.SpringSecurityConfig;
 import com.javaee.springbootodo.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -59,14 +60,14 @@ public class UserController {
 //    }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest lrq) {
+    public  ResponseEntity<String> login(@RequestBody LoginRequest lrq) {
         System.out.println("登录校验");
         System.out.println(lrq.getId());
 
         UserEntity user = userService.findById(lrq.getId());
         if(user == null) {
             System.out.println("用户不存在");
-            return "用户不存在";
+            return new ResponseEntity<>("用户不存在", HttpStatus.NOT_FOUND); // 状态码 404 用户不存在
         }
         String pswd = userService.getPassword(user);
 
@@ -75,18 +76,18 @@ public class UserController {
             try {
                 System.out.println("登录校验中");
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(lrq.getId(), lrq.getPassword()));
-                return JwtUtils.generateTokenAsymmetric(String.valueOf(lrq.getId()));
-            } catch (BadCredentialsException e) {
-                System.out.println("密码错误");
-                throw new RuntimeException("Invalid credentials");
-            } catch (Exception e) {
+                // 生成 JWT Token
+                String token = JwtUtils.generateTokenAsymmetric(String.valueOf(lrq.getId()));
+                return new ResponseEntity<>(token, HttpStatus.OK);  // 状态码 200 登录成功
+            }catch (Exception e) {
                 System.out.println("登录校验失败");
-                throw new RuntimeException("Invalid credentials");
+                // 返回状态码 500 (Internal Server Error) 其他异常
+                return new ResponseEntity<>("登录校验失败", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         else {
-            System.out.println("密码错误");
-            return "密码错误";
+            // 返回状态码 401 (Unauthorized) 密码错误
+            return new ResponseEntity<>("密码错误", HttpStatus.UNAUTHORIZED);
         }
     }
 }
