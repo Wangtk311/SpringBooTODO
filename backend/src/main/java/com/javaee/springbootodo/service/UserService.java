@@ -18,4 +18,7 @@ public interface UserService {
 
     // Delete a user entry by its ID
     void deleteById(int theId);
+
+    //获取userid
+    int getId(UserEntity theUser);
 }

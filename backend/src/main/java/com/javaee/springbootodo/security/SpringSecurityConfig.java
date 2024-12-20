@@ -1,8 +1,9 @@
 package com.javaee.springbootodo.security;
 
 import com.javaee.springbootodo.entity.UserEntity;
-import com.javaee.springbootodo.repository.UserRepository;
+
 import com.javaee.springbootodo.service.UserService;
+import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,12 +22,16 @@ import java.util.ArrayList;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SpringSecurityConfig {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -64,25 +69,16 @@ public class SpringSecurityConfig {
     // 配置 HttpSecurity
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/login", "/user/register","/swagger-ui/**", "/swagger-ui.html", "/error").permitAll()  // 放行/error
                         .anyRequest().authenticated()
                 )
-//                .exceptionHandling(exceptionHandling ->
-//                        exceptionHandling
-//                                .accessDeniedHandler((request, response, accessDeniedException) -> {
-//                                    // 访问拒绝时的自定义逻辑，重定向到/error
-//                                    response.sendRedirect("/error");
-//                                })
-//                                .authenticationEntryPoint((request, response, authException) -> {
-//                                    // 未认证时的处理逻辑
-//                                    response.sendRedirect("/login");  // 或者你可以返回401错误
-//                                })
-//                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 添加 JwtAuthenticationFilter
         return http.build();
     }
 

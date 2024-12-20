@@ -13,10 +13,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173/")  // Allows CORS requests from the specified origin
 @RequestMapping("/user")
 public class UserController {
     @Resource
@@ -29,22 +33,28 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserEntity user) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody UserEntity user) {
         System.out.println(user.toString());
         // 2. 对密码进行加密
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        userService.save(user);
-        // 4. 返回成功消息
-        return ResponseEntity.ok("注册成功");
+        UserEntity savedUser = userService.save(user);
+
+        // 创建响应消息
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "注册成功");
+        response.put("id", savedUser.getId());
+
+        return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/query")
-    public UserEntity queryUser(@RequestBody int id) {
-        System.out.println(id);
-        return userService.findById(id);
-    }
+//    @PostMapping("/query")
+//    public UserEntity queryUser(int id) {
+//
+//        System.out.println(id);
+//        return userService.findById(id);
+//    }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest lrq) {

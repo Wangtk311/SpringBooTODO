@@ -19,4 +19,10 @@ public interface TodoService {
 
     // Delete a Todo entry by its ID
     void deleteById(int theId);
+
+    //获取userid
+    int getUserId(TodoEntity theTodo);
+
+    //获取id
+    int getId(TodoEntity theTodo);
 }
