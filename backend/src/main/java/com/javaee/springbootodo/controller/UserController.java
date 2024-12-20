@@ -6,6 +6,7 @@ import com.javaee.springbootodo.service.UserService;
 import com.javaee.springbootodo.security.SpringSecurityConfig;
 import com.javaee.springbootodo.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +91,16 @@ public class UserController {
             return new ResponseEntity<>("密码错误", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @PostMapping("/tokencheck")
+    public ResponseEntity<Boolean>tokencheck(HttpServletRequest request) {
+        // 从请求头中获取Token
+        String header = request.getHeader("Authorization");
+        System.out.println("header.startsWith(\"Bearer \")");
+        String token = header.substring(7); // 去除"Bearer "前缀
+        return new ResponseEntity<>(JwtUtils.validateTokenAsymmetric(token), HttpStatus.OK);
+    }
+
 }
 
 class LoginRequest {
