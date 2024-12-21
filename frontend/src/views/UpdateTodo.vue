@@ -3,7 +3,7 @@
     <Navbar />  <!-- Import and use Navbar component -->
     <div class="my-5">
       <div class="mx-auto" style="max-width: 500px; width: 100%;">
-        <h1 class="text-center mb-4">更新待办</h1>   <!-- Heading for the update page -->
+        <h1 class="text-center mb-4">编辑待办</h1>   <!-- Heading for the update page -->
         <form @submit.prevent="updateTodo">
           <!-- Title Field -->
           <div class="row">
@@ -17,7 +17,7 @@
           <!-- Description Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
-              <label for="description" class="form-label" style="font-weight: bold;">待办内容</label>
+              <label for="description" class="form-label" style="font-weight: bold;">详细内容</label>
               <input type="text" name="description" id="description" class="form-control" placeholder="待办内容" required v-model="todo.description"/>
               <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
             </div>
@@ -78,6 +78,8 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
 import '../assets/styles.css'; // Import the new CSS file
+import store from '../store/index';
+import { serverURL } from '../serverURLConfig.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -99,7 +101,14 @@ const errorMessage = ref<string>('');
 // Fetch todo details from the server
 const getTodo = async () => {
   try {
-    const url = new URL(`http://localhost:8080/todo/${route.params.id}`);
+    await store.dispatch('verifyToken');
+    if (!store.state.isTokenValid) {
+      alert('登录状态已超时，请重新登录！');
+      await store.dispatch('logout');
+      await router.push('/login');
+      return;
+    }
+    const url = new URL(serverURL + `/todo/${route.params.id}`);
     const param = { userid: localStorage.getItem('user-id') };
     Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
     const response = await fetch(url, {
@@ -166,7 +175,14 @@ const validateForm = () => {
 const updateTodo = async () => {
   if (validateForm()) {
     try {
-      const response = await fetch('http://localhost:8080/todo', {
+      await store.dispatch('verifyToken');
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');
+        await store.dispatch('logout');
+        await router.push('/login');
+        return;
+      }
+      const response = await fetch(serverURL + '/todo', {
         method: 'PUT',  // HTTP method for updating existing todo
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send JWT token in the header

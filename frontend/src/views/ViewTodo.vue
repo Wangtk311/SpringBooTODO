@@ -5,49 +5,99 @@
 
     <!-- Container for the main content -->
     <div class="full-width-container">
-
       <!-- Header and add button -->
-      <h1 class="text-center mb-4">查看待办</h1>
-      <a href="/add" class="btn btn-primary mb-3">添加待办</a>
-
+      <h1 class="text-center mb-4">{{ getUserName() }}的所有待办</h1>
+      <div class="add-and-sort">
+        <div class="sort-container">
+          <a href="/add" class="btn btn-primary">添加待办</a>
+          <select id="sortBy" v-model="sortMethod" @change="sortTodos">
+            <option value="priority">按优先级排序</option>
+            <option value="date">按截止时间排序</option>
+          </select>
+        </div>
+      </div>
       <!-- Scrollable container for the table -->
-      <div class="table-container" v-if="todos.length > 0">
+      <div class="uncompleted-text">未完成待办</div>
+      <div class="table-container-no" v-if="uncomptodos.length > 0">
         <!-- Table to display the list of todos -->
         <table class="table">
           <thead>
           <tr>
             <!-- Table headers -->
-            <th scope="col" style="font-weight: bold;">待办标题</th>
-            <th scope="col" style="font-weight: bold;">待办内容</th>
-            <th scope="col" style="font-weight: bold;">截止时间</th>
-            <th scope="col" style="font-weight: bold;">优先级</th>
+            <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
+            <th scope="col" style="font-weight: bold; width: 80px">状态</th> <!-- 新增状态列 -->
+            <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
+            <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
+            <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
             <th scope="col" style="font-weight: bold;">是否完成</th>
-            <th scope="col" style="font-weight: bold;">操作</th>
+            <th scope="col" style="font-weight: bold;"> </th>
           </tr>
           </thead>
           <tbody>
           <!-- Loop through each todo item and display in table rows -->
-          <tr v-for="todo in todos" :key="todo.id">
-            <td>{{ todo.title }}</td>
-            <td>{{ todo.description }}</td>
-            <td>{{ todo.date }}</td>
+          <tr v-for="todo in uncomptodos" :key="todo.id">
             <td>
               <div :class="['priority-box', priorityClass(todo.priority)]">
                 {{ todo.priority }}
               </div>
             </td>
+            <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.date }}</td>
+            <td>{{ todo.description }}</td>
             <td>
-              <!-- Checkbox to mark the todo as completed or not -->
               <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
             </td>
             <td>
-              <!-- Buttons for editing and deleting a todo -->
               <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
               <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
             </td>
           </tr>
           </tbody>
         </table>
+      </div>
+      <div class="no-todos" v-else>
+        暂无未完成待办
+      </div>
+      <div class="completed-text">已完成待办</div>
+      <div class="table-container-yes" v-if="comptodos.length > 0">
+        <!-- Table to display the list of todos -->
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
+            <th scope="col" style="font-weight: bold; width: 80px">状态</th> <!-- 新增状态列 -->
+            <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
+            <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
+            <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
+            <th scope="col" style="font-weight: bold;">是否完成</th>
+            <th scope="col" style="font-weight: bold;"> </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="todo in comptodos" :key="todo.id">
+            <td>
+              <div :class="['priority-box', priorityClass(todo.priority)]">
+                {{ todo.priority }}
+              </div>
+            </td>
+            <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.date }}</td>
+            <td>{{ todo.description }}</td>
+            <td>
+              <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
+            </td>
+            <td>
+              <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+              <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="no-todos" v-else>
+        暂无已完成待办
       </div>
     </div>
   </main>
@@ -56,52 +106,186 @@
 <script>
 import Navbar from '../components/Navbar.vue';
 import '../assets/styles.css'; // Import the new CSS file
+import store from '../store/index';
+import { serverURL } from '../serverURLConfig.js';
 
 export default {
   name: 'ViewTodos',
+  computed: {
+    Navbar() {
+      return Navbar
+    }
+  },
   components: {
     Navbar
   },
   data() {
     return {
-      todos: []  // Array to store the list of todos
+      uncomptodos: [],  // Array to store the list of todos
+      comptodos: [],
+      sortMethod: 'priority',  // 默认按优先级排序
     }
   },
   methods: {
+    getStatusClass(status) {
+      if (status === '在将来') {
+        return 'status-future'; // 蓝色
+      } else if (status === '已完成') {
+        return 'status-completed'; // 绿色
+      } else if (status === '已逾期') {
+        return 'status-overdue'; // 红色
+      } else if (status === '较紧迫') {
+        return 'status-urgent'; // 橙色
+      }
+      return '';
+    },
+
     // Method to fetch todos from the server
     getTodos() {
-      const url = new URL('http://localhost:8080/todo');
-      const param = { userid: localStorage.getItem('user-id') };
-      Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
-      fetch(url, {
+      store.dispatch('verifyToken');
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');
+        store.dispatch('logout');
+        this.$router.push('/login');
+        return;
+      }
+
+      const url1 = new URL(serverURL + '/todouncomplete');
+      const param1 = { userid: localStorage.getItem('user-id') };
+      Object.keys(param1).forEach(key => url1.searchParams.append(key, param1[key]));
+      fetch(url1, {
         method: 'GET',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
           'Content-Type': 'form-data'
         }
       }).then(res => {
-            if (!res.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return res.json();  // Parse the response as JSON
-          })
-          .then(data => {
-            this.todos = data; // Update the todos data
-            console.log("Fetched todos:", data);
-          })
-          .catch(error => console.error('Error fetching todos:', error));
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      }).then(data => {
+        this.uncomptodos = data.map(todo => ({
+          ...todo,
+          status: this.getTodoStatus(todo.date)  // 根据截止日期设置状态
+        }));
+        this.sortTodos();
+      }).catch(error => console.error('Error fetching todos:', error));
+
+      store.dispatch('verifyToken');
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');
+        store.dispatch('logout');
+        this.$router.push('/login');
+        return;
+      }
+
+      const url2 = new URL(serverURL + '/todocompleted');
+      const param2 = { userid: localStorage.getItem('user-id') };
+      Object.keys(param2).forEach(key => url2.searchParams.append(key, param2[key]));
+      fetch(url2, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
+          'Content-Type': 'form-data'
+        }
+      }).then(res => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      }).then(data => {
+        this.comptodos = data.map(todo => ({
+          ...todo,
+          status: '已完成'  // 已完成的待办直接设置为已完成
+        }));
+        this.sortTodos();
+      }).catch(error => console.error('Error fetching todos:', error));
+    },
+
+    getTodoStatus(date) {
+      const currentDate = new Date();
+      const deadlineDate = new Date(date);
+      const timeDifference = deadlineDate - currentDate; // 计算截止日期与当前时间的差值
+      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3天的毫秒数
+
+      if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
+        return '较紧迫';  // 如果截止日期在未来 3 天内，返回“较紧迫”
+      } else if (deadlineDate < currentDate) {
+        return '已逾期';  // 如果截止日期已过去，返回“已逾期”
+      } else {
+        return '在将来';  // 否则返回“在将来”
+      }
+    },
+
+    // 定时检查未完成待办的状态
+    checkTodosStatus() {
+      const currentDate = new Date();
+      this.uncomptodos.forEach(todo => {
+        const deadlineDate = new Date(todo.date);
+        const timeDifference = deadlineDate - currentDate; // 计算截止日期与当前时间的差值
+        const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3天的毫秒数
+
+        if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
+          // 截止日期在未来3天内，设置为“较紧迫”
+          todo.status = '较紧迫';
+        } else if (deadlineDate < currentDate && todo.status !== '已逾期') {
+          // 截止日期已过，设置为“已逾期”
+          todo.status = '已逾期';
+        } else if (deadlineDate > currentDate && todo.status !== '较紧迫') {
+          // 截止日期在未来且不在3天内，设置为“在将来”
+          todo.status = '在将来';
+        }
+      });
+    },
+
+    // Method to sort todos by priority
+    sortTodos() {
+      if (this.sortMethod === 'priority') {
+        this.uncomptodos = this.sortTodosByPriorityAndDate(this.uncomptodos);
+        this.comptodos = this.sortTodosByPriorityAndDate(this.comptodos);
+      } else if (this.sortMethod === 'date') {
+        this.uncomptodos = this.sortTodosByDateAndPriority(this.uncomptodos);
+        this.comptodos = this.sortTodosByDateAndPriority(this.comptodos);
+      }
+    },
+
+    // Method to sort todos by priority
+    sortTodosByPriorityAndDate(todos) {
+      const priorityOrder = { '高': 3, '中': 2, '低': 1 };
+      return todos.sort((a, b) => {
+        const priorityComparison = priorityOrder[b.priority] - priorityOrder[a.priority];
+        if (priorityComparison !== 0) return priorityComparison;
+        return new Date(a.date) - new Date(b.date); // 如果优先级相同，按日期排序
+      });
+    },
+
+    // Method to sort todos by deadline (date)
+    sortTodosByDateAndPriority(todos) {
+      return todos.sort((a, b) => {
+        const dateComparison = new Date(a.date) - new Date(b.date);
+        if (dateComparison !== 0) return dateComparison;
+        const priorityOrder = { '高': 3, '中': 2, '低': 1 };
+        return priorityOrder[b.priority] - priorityOrder[a.priority]; // 如果日期相同，按优先级排序
+      });
     },
 
     // Method to delete a todo by its ID
     deleteTodo(id) {
-      console.log(`Attempting to delete todo with id: ${id}`);
-      const url = new URL(`http://localhost:8080/todo/${id}`);
+      store.dispatch('verifyToken');
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');
+        store.dispatch('logout');
+        this.$router.push('/login');
+        return;
+      }
+      const url = new URL(serverURL + `/todo/${id}`);
       const param = { userid: localStorage.getItem('user-id') };
       Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
       fetch(url, {
-        method: 'DELETE',  // HTTP method for deletion
+        method: 'DELETE',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
           'Content-Type': 'from-data'
         }
       })
@@ -109,42 +293,45 @@ export default {
             if (!res.ok) {
               throw new Error(`HTTP error! status: ${res.status}`);
             }
-            return res.text(); // Handle response as plain text
+            return res.text();
           })
           .then(data => {
-            console.log(`Todo with id ${id} deleted successfully. Response:`, data);
-            this.getTodos(); // Refresh the list after deletion
+            this.getTodos();  // Refresh the list after deletion
           })
           .catch(error => console.error('Error deleting todo:', error));
     },
 
     // Method to toggle the completion status of a todo
     toggleCompletion(todo) {
-      // Create a new object with the updated completed status
+      store.dispatch('verifyToken');
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');
+        store.dispatch('logout');
+        this.$router.push('/login');
+        return;
+      }
       const updatedTodo = {...todo, completed: !todo.completed};
 
-      fetch(`http://localhost:8080/todo`, {
-        method: 'PUT', // HTTP method for update
+      fetch(serverURL + `/todo`, {
+        method: 'PUT',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
-          'Content-Type': 'application/json'  // Content type of the request
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updatedTodo)   // Send the updated todo as JSON
+        body: JSON.stringify(updatedTodo)
       })
           .then(res => {
             if (!res.ok) {
               throw new Error('Network response was not ok');
             }
-            return res.json();  // Parse the response as JSON
+            return res.json();
           })
           .then(data => {
-            console.log('Todo updated:', data);
-            this.getTodos(); // Refresh the list after update
+            this.getTodos();  // Refresh the list after update
           })
           .catch(error => console.error('Error updating todo:', error));
     },
 
-    // Method to return the class based on priority
     priorityClass(priority) {
       switch (priority) {
         case '高':
@@ -156,11 +343,20 @@ export default {
         default:
           return '';
       }
-    }
+    },
 
+    getUserName() {
+      return localStorage.getItem('user-name');
+    }
   },
+
   mounted() {
-    this.getTodos(); // Fetch todos when component is mounted
+    this.getTodos();  // Fetch todos when component is mounted
+
+    // 每分钟检查一次状态
+    setInterval(() => {
+      this.checkTodosStatus();
+    }, 60000);
   }
 }
 </script>

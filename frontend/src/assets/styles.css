@@ -1,6 +1,6 @@
 /* General button styling */
 .btn {
-    margin-bottom: 1rem; /* Space below buttons */
+    margin-bottom: 0; /* Space below buttons */
 }
   
 /* Checkbox container styling */
@@ -22,10 +22,70 @@
 }
 
 /* Full-width and scrollable table container */
-.table-container {
+.table-container-no {
     width: 100%; /* Full width */
-    max-height: 78vh; /* Maximum height */
+    max-height: 43vh; /* Maximum height */
     overflow-y: auto; /* Vertical scrolling */
+}
+
+.table-container-yes {
+    width: 100%; /* Full width */
+    max-height: 25vh; /* Maximum height */
+    overflow-y: auto; /* Vertical scrolling */
+}
+
+.table td:last-child {
+    text-align: right;
+}
+
+.table th:last-child {
+    text-align: right;
+}
+
+.status-future {
+    color: #57aee1 !important; /* 使用 !important 确保样式被应用 */
+    font-weight: bold;
+    padding: 5px;
+    background: #222222;
+}
+
+.status-completed {
+    color: #0aa40a !important; /* 使用 !important 确保样式被应用 */
+    font-weight: bold;
+    padding: 5px;
+    background: #222222;
+}
+
+.status-overdue {
+    color: #ff1010 !important; /* 使用 !important 确保样式被应用 */
+    font-weight: bold;
+    padding: 5px;
+    background: #222222;
+}
+
+.status-urgent {
+    color: #f3c04a !important; /* 使用 !important 确保样式被应用 */
+    font-weight: bold;
+    padding: 5px;
+    background: #222222;
+}
+
+.completed-text {
+    color: #000000; /* Gray text color */
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.uncompleted-text {
+    color: #000000; /* Black text color */
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #f2f2f2;
 }
 
 /* Sticky table headers */
@@ -90,4 +150,19 @@ thead th {
 
 .priority-high {
     background-color: red; /* High priority color */
+}
+
+.no-todos {
+    color: #000000; /* Black text color */
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.sort-container {
+    justify-content: space-between; /* 元素左对齐 */
+    display: flex;                /* Flex布局 */
+    margin-bottom: 1rem;         /* Space below */
 }

@@ -20,7 +20,7 @@
           <!-- Description -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
-              <label for="description" class="form-label" style="font-weight: bold;">待办内容</label>
+              <label for="description" class="form-label" style="font-weight: bold;">详细内容</label>
               <input type="text" name="description" id="description" class="form-control" placeholder="待办内容" required v-model="todo.description">
               <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
             </div>
@@ -71,7 +71,9 @@
 
 <script>
 import Navbar from '../components/Navbar.vue';  // Import the Navbar component
-import '../assets/styles.css'; // Import the CSS file
+import '../assets/styles.css';
+import store from "@/store/index.js"; // Import the CSS file
+import { serverURL } from '../serverURLConfig.js';
 
 export default {
   name: 'AddTodo',
@@ -143,30 +145,37 @@ export default {
     addTodo() {
       if (this.validateForm()) {  // Only proceed if the form is valid
         // Send a POST request to the server to add a new todo
-        fetch('http://localhost:8080/todo', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
-            'Content-Type': 'application/json'  // Send data as JSON
-          },
-          body: JSON.stringify(this.todo)
-        })
-            // Handle the server response
-            .then(res => {
-              if (!res.ok) {
-                throw new Error('Network response was not ok'); // Handle network errors
-              }
-              return res.text();  // Return response text
-            })
-            .then(data => {
-              this.successMessage = 'Todo added successfully!';   // Success message
-              this.errorMessage = ''; // Clear any previous errors
-              this.$router.push("/"); // Redirect to the home page
-            })
-            .catch(error => {
-              this.errorMessage = 'Error adding todo: ' + error.message;  // Error message
-              this.successMessage = ''; // Clear any previous success messages
-            });
+        store.dispatch('verifyToken');  // Verify the token before making the request
+        if (!store.state.isTokenValid) {
+          alert('登录状态已超时，请重新登录！');  // Alert the user to login
+          store.dispatch('logout');  // Logout the user
+          this.$router.push('/login');  // Redirect to the login page
+        } else {
+          fetch(serverURL + '/todo', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
+              'Content-Type': 'application/json'  // Send data as JSON
+            },
+            body: JSON.stringify(this.todo)
+          })
+              // Handle the server response
+              .then(res => {
+                if (!res.ok) {
+                  throw new Error('Network response was not ok'); // Handle network errors
+                }
+                return res.text();  // Return response text
+              })
+              .then(data => {
+                this.successMessage = 'Todo added successfully!';   // Success message
+                this.errorMessage = ''; // Clear any previous errors
+                this.$router.push("/"); // Redirect to the home page
+              })
+              .catch(error => {
+                this.errorMessage = 'Error adding todo: ' + error.message;  // Error message
+                this.successMessage = ''; // Clear any previous success messages
+              });
+        }
       }
     }
   }

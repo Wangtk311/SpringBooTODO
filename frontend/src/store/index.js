@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import { serverURL } from '../serverURLConfig.js';
 
 const store = createStore({
     state: {
@@ -39,7 +40,7 @@ const store = createStore({
     actions: {
         // 登录操作
         async login({ commit }, { id, password }) {
-            const response = await fetch('http://localhost:8080/user/login', {
+            const response = await fetch(serverURL + '/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,7 +71,7 @@ const store = createStore({
             }
 
             try {
-                const response = await fetch('http://localhost:8080/user/verifyToken', {
+                const response = await fetch(serverURL + '/user/tokencheck', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
