@@ -102,6 +102,7 @@
 <script>
 import Navbar from '../components/Navbar.vue';
 import '../assets/styles.css'; // Import the new CSS file
+import store from '../store/index';
 
 export default {
   name: 'ViewTodos',
@@ -117,6 +118,13 @@ export default {
   methods: {
     // Method to fetch todos from the server
     getTodos() {
+      store.dispatch('verifyToken');  // Validate the token before fetching todos
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');  // Show an alert if the user is not logged in
+        store.dispatch('logout');  // Logout the user
+        this.$router.push('/login');
+        return;
+      }
       const url1 = new URL('http://localhost:8080/todouncomplete');
       const param1 = { userid: localStorage.getItem('user-id') };
       Object.keys(param1).forEach(key => url1.searchParams.append(key, param1[key]));
@@ -138,6 +146,13 @@ export default {
           })
           .catch(error => console.error('Error fetching todos:', error));
 
+      store.dispatch('verifyToken');  // Validate the token before fetching todos
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');  // Show an alert if the user is not logged in
+        store.dispatch('logout');  // Logout the user
+        this.$router.push('/login');
+        return;
+      }
       const url2 = new URL('http://localhost:8080/todocompleted');
       const param2 = { userid: localStorage.getItem('user-id') };
       Object.keys(param2).forEach(key => url2.searchParams.append(key, param2[key]));
@@ -162,6 +177,13 @@ export default {
 
     // Method to delete a todo by its ID
     deleteTodo(id) {
+      store.dispatch('verifyToken');  // Validate the token before deleting a todo
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');  // Show an alert if the user is not logged in
+        store.dispatch('logout');  // Logout the user
+        this.$router.push('/login');
+        return;
+      }
       console.log(`Attempting to delete todo with id: ${id}`);
       const url = new URL(`http://localhost:8080/todo/${id}`);
       const param = { userid: localStorage.getItem('user-id') };
@@ -188,6 +210,13 @@ export default {
 
     // Method to toggle the completion status of a todo
     toggleCompletion(todo) {
+      store.dispatch('verifyToken');  // Validate the token before updating a todo
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');  // Show an alert if the user is not logged in
+        store.dispatch('logout');  // Logout the user
+        this.$router.push('/login');
+        return;
+      }
       // Create a new object with the updated completed status
       const updatedTodo = {...todo, completed: !todo.completed};
 

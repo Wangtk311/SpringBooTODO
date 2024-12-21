@@ -78,6 +78,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
 import '../assets/styles.css'; // Import the new CSS file
+import store from '../store/index';
 
 const route = useRoute();
 const router = useRouter();
@@ -99,6 +100,13 @@ const errorMessage = ref<string>('');
 // Fetch todo details from the server
 const getTodo = async () => {
   try {
+    await store.dispatch('verifyToken');
+    if (!store.state.isTokenValid) {
+      alert('登录状态已超时，请重新登录！');
+      await store.dispatch('logout');
+      await router.push('/login');
+      return;
+    }
     const url = new URL(`http://localhost:8080/todo/${route.params.id}`);
     const param = { userid: localStorage.getItem('user-id') };
     Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
@@ -166,6 +174,13 @@ const validateForm = () => {
 const updateTodo = async () => {
   if (validateForm()) {
     try {
+      await store.dispatch('verifyToken');
+      if (!store.state.isTokenValid) {
+        alert('登录状态已超时，请重新登录！');
+        await store.dispatch('logout');
+        await router.push('/login');
+        return;
+      }
       const response = await fetch('http://localhost:8080/todo', {
         method: 'PUT',  // HTTP method for updating existing todo
         headers: {

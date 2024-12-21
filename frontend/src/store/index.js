@@ -70,7 +70,7 @@ const store = createStore({
             }
 
             try {
-                const response = await fetch('http://localhost:8080/user/verifyToken', {
+                const response = await fetch('http://localhost:8080/user/tokencheck', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
