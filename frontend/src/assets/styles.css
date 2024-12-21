@@ -65,6 +65,18 @@
     background: #222222;
 }
 
+.deadline-urgent {
+    color: #f3c04a !important;
+}
+
+.deadline-overdue {
+    color: #ff1010 !important;
+}
+
+.deadline-future {
+    color: #57aee1 !important;
+}
+
 .completed-text {
     color: #000000;
     font-size: 16px;

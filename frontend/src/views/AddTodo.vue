@@ -92,15 +92,15 @@ export default {
         this.errors.title = '必须提供一个标题';
         isValid = false;
       } else if (this.todo.title.length < 2) {
-        this.errors.title = '标题不能少于两个字符';
+        this.errors.title = '标题不应少于两个字符';
         isValid = false;
       }
 
       if (!this.todo.description.trim()) {
         this.errors.description = '必须提供一段内容';
         isValid = false;
-      } else if (this.todo.description.length < 3) {
-        this.errors.description = '内容不能少于三个字符';
+      } else if (this.todo.description.length < 2) {
+        this.errors.description = '内容不应少于两个字符';
         isValid = false;
       }
 
@@ -108,7 +108,7 @@ export default {
         this.errors.date = '必须提供一个截止日期';
         isValid = false;
       } else if (new Date(this.todo.date) < new Date()) {
-        this.errors.date = '不能选择过去的时间';
+        this.errors.date = '不应选择过去的时间';
         isValid = false;
       }
 

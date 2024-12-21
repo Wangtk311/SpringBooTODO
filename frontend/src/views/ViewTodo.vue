@@ -8,7 +8,7 @@
         <div class="sort-container">
           <a href="/add" class="btn btn-primary">添加待办</a>
           <select id="sortBy" v-model="sortMethod" @change="sortTodos">
-            <option value="priority">按优先级排序</option>
+            <option value="priority">按优先级别排序</option>
             <option value="date">按截止时间排序</option>
           </select>
         </div>
@@ -36,7 +36,7 @@
             </td>
             <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
             <td>{{ todo.title }}</td>
-            <td>{{ todo.date }}</td>
+            <td :class="getDeadlineClass(todo.date)">{{ todo.date }}</td>
             <td>{{ todo.description }}</td>
             <td>
               <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
@@ -132,6 +132,20 @@ export default {
       return '';
     },
 
+    getDeadlineClass(date) {
+      const currentDate = new Date();
+      const deadlineDate = new Date(date);
+      const timeDifference = deadlineDate - currentDate;
+      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
+
+      if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
+        return 'deadline-urgent';
+      } else if (deadlineDate < currentDate) {
+        return 'deadline-overdue';
+      }
+      return 'deadline-future';
+    },
+
     getTodos() {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -192,6 +206,7 @@ export default {
         }));
         this.sortTodos();
       }).catch(error => console.error('获取待办失败:', error));
+      this.checkTodosStatus();
     },
 
     getTodoStatus(date) {
@@ -260,6 +275,9 @@ export default {
         alert('登录状态已超时，请重新登录！');
         store.dispatch('logout');
         this.$router.push('/login');
+        return;
+      }
+      if (!confirm('确定要删除这个待办吗？此操作无法撤销！')) {
         return;
       }
       const url = new URL(serverURL + `/todo/${id}`);

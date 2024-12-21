@@ -129,15 +129,15 @@ const validateForm = () => {
     errors.value.title = '必须提供一个标题';
     isValid = false;
   } else if (todo.value.title.length < 2) {
-    errors.value.title = '标题不能少于两个字符';
+    errors.value.title = '标题不应少于两个字符';
     isValid = false;
   }
 
   if (!todo.value.description.trim()) {
     errors.value.description = '必须提供一段内容';
     isValid = false;
-  } else if (todo.value.description.length < 3) {
-    errors.value.description = '内容不能少于三个字符';
+  } else if (todo.value.description.length < 2) {
+    errors.value.description = '内容不应少于两个字符';
     isValid = false;
   }
 
@@ -145,7 +145,7 @@ const validateForm = () => {
     errors.value.date = '必须提供一个截止日期';
     isValid = false;
   } else if (new Date(todo.value.date) <= new Date()) {
-    errors.value.date = '不能选择过去的时间';
+    errors.value.date = '不应选择过去的时间';
     isValid = false;
   }
 
