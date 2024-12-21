@@ -20,7 +20,7 @@
           <!-- Description -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
-              <label for="description" class="form-label" style="font-weight: bold;">待办内容</label>
+              <label for="description" class="form-label" style="font-weight: bold;">详细内容</label>
               <input type="text" name="description" id="description" class="form-control" placeholder="待办内容" required v-model="todo.description">
               <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
             </div>
@@ -73,6 +73,7 @@
 import Navbar from '../components/Navbar.vue';  // Import the Navbar component
 import '../assets/styles.css';
 import store from "@/store/index.js"; // Import the CSS file
+import { serverURL } from '../serverURLConfig.js';
 
 export default {
   name: 'AddTodo',
@@ -150,7 +151,7 @@ export default {
           store.dispatch('logout');  // Logout the user
           this.$router.push('/login');  // Redirect to the login page
         } else {
-          fetch('http://localhost:8080/todo', {
+          fetch(serverURL + '/todo', {
             method: 'POST',
             headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header

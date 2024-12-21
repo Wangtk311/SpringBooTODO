@@ -47,7 +47,7 @@ export default {
       store.state.userId = null;
       store.state.isTokenValid = null;
       store.state.userName = null;
-      localStorage.removeItem('token');
+      localStorage.removeItem('jwt-token');
       localStorage.removeItem('user-id');
       localStorage.removeItem('isTokenValid');
       localStorage.removeItem('user-name');

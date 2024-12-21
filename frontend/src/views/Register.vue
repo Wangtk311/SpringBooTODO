@@ -21,6 +21,7 @@
 // 引入 Vuex store
 import { useStore } from 'vuex'
 import { ref } from 'vue'
+import { serverURL } from '../serverURLConfig.js';
 
 // 获取 Vuex store
 const store = useStore()
@@ -35,7 +36,7 @@ const register = async () => {
     alert('用户名或密码不能为空');
     return;
   }
-  const respond = await fetch('http://localhost:8080/user/register', {
+  const respond = await fetch(serverURL + '/user/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
