@@ -42,13 +42,13 @@ public class SpringSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username-> {
-            System.out.println("finddddddd");
+            //System.out.println("finddddddd");
             UserEntity userEntity = userService.findById(Integer.parseInt(username));
             if (userEntity == null) {
                 throw new UsernameNotFoundException(String.format("User %s not found", username));
             }
 
-            System.out.println("userEntity.getPassword():"+userEntity.getPassword());
+            //System.out.println("userEntity.getPassword():"+userEntity.getPassword());
             return new User(String.valueOf(userEntity.getId()), userEntity.getPassword(), new ArrayList<>());
         };
     }

@@ -31,7 +31,7 @@ public class TodoController {
 
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名
@@ -61,7 +61,7 @@ public class TodoController {
     public TodoEntity getTodoById(@PathVariable("id") int id, int userid, HttpServletRequest request) {
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名
@@ -92,7 +92,7 @@ public class TodoController {
     public List<TodoEntity> getTodos(int userid, HttpServletRequest request) {
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名
@@ -114,7 +114,7 @@ public class TodoController {
     public List<TodoEntity> getTodosComptld(int userid, HttpServletRequest request) {
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名
@@ -135,7 +135,7 @@ public class TodoController {
     public List<TodoEntity> getTodosUnComptle(int userid, HttpServletRequest request) {
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名
@@ -158,7 +158,7 @@ public class TodoController {
 
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名
@@ -197,7 +197,7 @@ public class TodoController {
 
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
 
         // 从Token中提取用户名

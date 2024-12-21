@@ -38,7 +38,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody UserEntity user) {
-        System.out.println(user.toString());
+        //System.out.println(user.toString());
         // 2. 对密码进行加密
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -62,24 +62,24 @@ public class UserController {
 
     @PostMapping("/login")
     public  ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest lrq) {
-        System.out.println("登录校验");
-        System.out.println(lrq.getId());
+        //System.out.println("登录校验");
+        //System.out.println(lrq.getId());
 
         // 创建响应消息
         Map<String, Object> response = new HashMap<>();
 
         UserEntity user = userService.findById(lrq.getId());
         if(user == null) {
-            System.out.println("用户不存在");
+            //System.out.println("用户不存在");
             response.put("message", "用户不存在");
             return ResponseEntity.badRequest().body(response);// 状态码 404 用户不存在
         }
         String pswd = userService.getPassword(user);
 
         if(passwordEncoder.matches(lrq.getPassword(), pswd)) {
-            System.out.println("密码正确");
+            //System.out.println("密码正确");
             try {
-                System.out.println("登录校验中");
+                //System.out.println("登录校验中");
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(lrq.getId(), lrq.getPassword()));
                 // 生成 JWT Token
                 String token = JwtUtils.generateTokenAsymmetric(String.valueOf(lrq.getId()));
@@ -89,7 +89,7 @@ public class UserController {
                 response.put("username", name);
                 return ResponseEntity.ok().body(response); // 状态码 200 登录成功
             }catch (Exception e) {
-                System.out.println("登录校验失败");
+                //System.out.println("登录校验失败");
                 response.put("message", "登录校验失败");
                 // 返回状态码 500 (Internal Server Error) 其他异常
                 return ResponseEntity.badRequest().body(response);
@@ -106,7 +106,7 @@ public class UserController {
     public ResponseEntity<Boolean>tokencheck(HttpServletRequest request) {
         // 从请求头中获取Token
         String header = request.getHeader("Authorization");
-        System.out.println("header.startsWith(\"Bearer \")");
+        //System.out.println("header.startsWith(\"Bearer \")");
         String token = header.substring(7); // 去除"Bearer "前缀
         return new ResponseEntity<>(JwtUtils.validateTokenAsymmetric(token), HttpStatus.OK);
     }

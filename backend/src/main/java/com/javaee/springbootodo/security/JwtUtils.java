@@ -26,9 +26,6 @@ public class JwtUtils {
 
     /**
      * 非对称加密生成 token
-     *
-     * @param username
-     * @return
      */
     public static String generateTokenAsymmetric (String username) {
         return Jwts.builder()
@@ -38,45 +35,10 @@ public class JwtUtils {
                 .compact();
     }
 
-    /**
-     * 对称加密生成 token
-     *
-     * @param username
-     * @return
-     */
-    public static String generateTokenSymmetric(String username) {
-        return Jwts.builder()
-                .claim("sub", username)
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.ES512, SECRET_KEY)
-                .compact();
-    }
 
-    /**
-     * 对称加密校验token
-     *
-     * @param token
-     * @return
-     */
-    public static boolean validateTokenSymmetric (String token) {
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-            return claims.getExpiration().after(new Date());
-        } catch (Exception e) {
-            // 处理解析或验证错误，可以根据需要抛出异常或返回 null
-            throw new RuntimeException("JWT validation failed: " + e.getMessage(), e);
-        }
-    }
 
     /**
      * 非对称加密校验token
-     *
-     * @param token
-     * @return
      */
     public static boolean validateTokenAsymmetric(String token) {
         try {
@@ -92,26 +54,9 @@ public class JwtUtils {
         }
     }
 
-    /**
-     * 对称加密根据token获取用户名
-     *
-     * @param token
-     * @return
-     */
-    public static String getUsernameFromTokenSymmetric (String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(keyPair.getPublic())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return (String) claims.get("sub");
-    }
 
     /**
      * 非对称加密根据token获取用户名
-     *
-     * @param token
-     * @return
      */
     public static String getUsernameFromTokenAsymmetric (String token) {
         Claims claims = Jwts.parser()

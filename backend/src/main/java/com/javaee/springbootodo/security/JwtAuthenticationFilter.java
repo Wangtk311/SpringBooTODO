@@ -31,16 +31,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         List<String> allowedURI = Arrays.asList("/user/login", "/user/register","/swagger-ui/","/user/register");
-        System.out.println(request.getRequestURI());
+        //System.out.println(request.getRequestURI());
         if (allowedURI.contains(request.getRequestURI())) {
             filterChain.doFilter(request, response);
-            System.out.println("request.getRequestURI()True");
+            //System.out.println("request.getRequestURI()True");
             return; // 放行后直接返回
         }
-        System.out.println("header.startsWith(\"Bearer \")--------------");
+        //System.out.println("header.startsWith(\"Bearer \")--------------");
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
-            System.out.println("header.startsWith(\"Bearer \")");
+            //System.out.println("header.startsWith(\"Bearer \")");
             String token = header.substring(7); // 去除"Bearer "前缀
 
             if (JwtUtils.validateTokenAsymmetric(token)) {
