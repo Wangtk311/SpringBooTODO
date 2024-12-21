@@ -116,8 +116,8 @@ const getTodo = async () => {
     todo.value = data;
     console.log(todo.value);
   } catch (error) {
-    console.error('Error fetching todo:', error);
-    errorMessage.value = 'Failed to fetch todo details.';
+    console.error('获取待办失败:', error);
+    errorMessage.value = '获取待办失败，请检查网络!';
   }
 };
 
@@ -180,11 +180,13 @@ const updateTodo = async () => {
       }
       const data = await response.json();
       console.log(data);
-      successMessage.value = 'Todo updated successfully!';
+      successMessage.value = '已更新待办内容!';
       errorMessage.value = '';
-      router.push('/');
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
     } catch (error) {
-      errorMessage.value = 'Error updating todo: ' + error.message;
+      errorMessage.value = '更新待办失败，请检查网络!';
       successMessage.value = '';
     }
   }

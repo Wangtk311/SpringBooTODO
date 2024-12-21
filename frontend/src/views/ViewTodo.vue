@@ -161,7 +161,7 @@ export default {
           status: this.getTodoStatus(todo.date)
         }));
         this.sortTodos();
-      }).catch(error => console.error('Error fetching todos:', error));
+      }).catch(error => console.error('获取待办失败:', error));
 
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -191,7 +191,7 @@ export default {
           status: '已完成'
         }));
         this.sortTodos();
-      }).catch(error => console.error('Error fetching todos:', error));
+      }).catch(error => console.error('获取待办失败:', error));
     },
 
     getTodoStatus(date) {
@@ -281,7 +281,7 @@ export default {
           .then(data => {
             this.getTodos();
           })
-          .catch(error => console.error('Error deleting todo:', error));
+          .catch(error => console.error('删除待办失败:', error));
     },
 
     toggleCompletion(todo) {
@@ -311,7 +311,7 @@ export default {
           .then(data => {
             this.getTodos();
           })
-          .catch(error => console.error('Error updating todo:', error));
+          .catch(error => console.error('更新待办失败:', error));
     },
 
     priorityClass(priority) {

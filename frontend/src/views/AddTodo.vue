@@ -143,12 +143,14 @@ export default {
                 return res.text();
               })
               .then(data => {
-                this.successMessage = 'Todo added successfully!';
+                this.successMessage = '成功添加新待办!';
                 this.errorMessage = '';
-                this.$router.push("/");
+                setTimeout(() => {
+                  this.$router.push("/");
+                }, 1000);
               })
               .catch(error => {
-                this.errorMessage = 'Error adding todo: ' + error.message;
+                this.errorMessage = '添加待办失败，请检查网络!';
                 this.successMessage = '';
               });
         }
