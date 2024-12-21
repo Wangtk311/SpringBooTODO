@@ -79,6 +79,6 @@ public class UserEntity {
                 "id=" + id +
                 ", password='" + password + '\'' +
                 ", name='" + name +
-                '}';
+                "'}";
     }
 }
