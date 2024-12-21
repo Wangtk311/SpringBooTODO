@@ -1,1 +1,1 @@
-export const serverURL = 'http://localhost:8080';
+export const serverURL = 'http://47.99.66.142:8080';
