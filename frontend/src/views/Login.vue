@@ -33,7 +33,7 @@ const password = ref('')
 // 登录处理函数
 const login = async () => {
   if (!id.value || !password.value) {
-    alert('用户名和密码不能为空');
+    alert('账号或密码不能为空');
     return;
   }
 
@@ -41,10 +41,10 @@ const login = async () => {
   await store.dispatch('login', { id: id.value, password: password.value });
 
   // 登录成功后可以进行跳转或其他操作
-  if (store.getters.isAuthenticated) {
+  if (store.getters.isAuthorized) {
     window.location.href = '/';
   } else {
-    alert('登录失败!');
+    alert('登录失败，请检查您的账号和密码是否正确！');
   }
 }
 

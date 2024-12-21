@@ -4,7 +4,7 @@
       <h2>注册新账号</h2>
       <div class="input-group">
         <label for="username">用户名</label>
-        <input type="text" id="username" v-model="name" placeholder="请输入用户名" />
+        <input type="text" id="username" v-model="username" placeholder="请输入用户名" />
       </div>
       <div class="input-group">
         <label for="password">密码</label>
@@ -17,19 +17,38 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Register',
-  data() {
-    return {
-      name: '',
-      password: ''
-    }
-  },
-  methods: {
-    register() {
-      this.$router.push('/login');
-    }
+<script setup>
+// 引入 Vuex store
+import { useStore } from 'vuex'
+import { ref } from 'vue'
+
+// 获取 Vuex store
+const store = useStore()
+
+// 定义表单输入字段
+const username = ref('')
+const password = ref('')
+
+// 注册处理函数
+const register = async () => {
+  if (!username.value || !password.value) {
+    alert('用户名或密码不能为空');
+    return;
+  }
+  const respond = await fetch('http://localhost:8080/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: username.value, password: password.value })
+  });
+
+  if (respond.ok) {
+    const resJson = await respond.json();
+    alert('注册成功！您的账号为: ' + resJson.id + '，请牢记您的账号！');
+    window.location.href = '/login';
+  } else {
+    alert('注册失败!请检查您网络!');
   }
 }
 </script>

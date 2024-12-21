@@ -37,9 +37,9 @@
             <div class="col-md-12 form-group mb-3">
               <label for="priority" class="form-label" style="font-weight: bold;">优先级</label>
               <select name="priority" id="priority" class="form-control" v-model="todo.priority">
-                <option value="Low">低</option>
-                <option value="Medium">中</option>
-                <option value="High">高</option>
+                <option value="低">低</option>
+                <option value="中">中</option>
+                <option value="高">高</option>
               </select>
               <span class="text-danger" v-if="errors.priority">{{ errors.priority }}</span>
             </div>
@@ -99,7 +99,16 @@ const errorMessage = ref<string>('');
 // Fetch todo details from the server
 const getTodo = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/todo/${route.params.id}`);
+    const url = new URL(`http://localhost:8080/todo/${route.params.id}`);
+    const param = { userid: localStorage.getItem('user-id') };
+    Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send JWT token in the header
+        'Content-Type': 'form-data'
+      }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -160,6 +169,7 @@ const updateTodo = async () => {
       const response = await fetch('http://localhost:8080/todo', {
         method: 'PUT',  // HTTP method for updating existing todo
         headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send JWT token in the header
           'Content-Type': 'application/json'  // Specify JSON content type
         },
         body: JSON.stringify(todo.value)    // Convert todo object to JSON

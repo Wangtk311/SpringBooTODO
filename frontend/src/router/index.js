@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   console.log("To route:", to.name);
   const store = useStore()
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters.isAuthenticated) {
+    if (!store.getters.isAuthorized) {
       next({ name: 'login' });
     } else {
       next();

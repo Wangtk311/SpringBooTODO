@@ -70,8 +70,16 @@ export default {
   methods: {
     // Method to fetch todos from the server
     getTodos() {
-      fetch('http://localhost:8080/todo')
-          .then(res => {
+      const url = new URL('http://localhost:8080/todo');
+      const param = { userid: localStorage.getItem('user-id') };
+      Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
+          'Content-Type': 'form-data'
+        }
+      }).then(res => {
             if (!res.ok) {
               throw new Error('Network response was not ok');
             }
@@ -87,8 +95,15 @@ export default {
     // Method to delete a todo by its ID
     deleteTodo(id) {
       console.log(`Attempting to delete todo with id: ${id}`);
-      fetch(`http://localhost:8080/todo/${id}`, {
-        method: 'DELETE'  // HTTP method for deletion
+      const url = new URL(`http://localhost:8080/todo/${id}`);
+      const param = { userid: localStorage.getItem('user-id') };
+      Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
+      fetch(url, {
+        method: 'DELETE',  // HTTP method for deletion
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
+          'Content-Type': 'from-data'
+        }
       })
           .then(res => {
             if (!res.ok) {
@@ -111,6 +126,7 @@ export default {
       fetch(`http://localhost:8080/todo`, {
         method: 'PUT', // HTTP method for update
         headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
           'Content-Type': 'application/json'  // Content type of the request
         },
         body: JSON.stringify(updatedTodo)   // Send the updated todo as JSON

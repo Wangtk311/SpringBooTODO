@@ -89,7 +89,7 @@ export default {
         date: '',
         priority: '低', // Default priority
         completed: 'false', // Default completed
-        userid: 111111
+        userid: localStorage.getItem('user-id')  // Get the user ID from local storage
       },
       errors: {},
       successMessage: '',
@@ -146,6 +146,7 @@ export default {
         fetch('http://localhost:8080/todo', {
           method: 'POST',
           headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
             'Content-Type': 'application/json'  // Send data as JSON
           },
           body: JSON.stringify(this.todo)
