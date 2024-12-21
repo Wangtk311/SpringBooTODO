@@ -14,7 +14,7 @@ import java.util.Map;
 public class JwtUtils {
     private static String SECRET_KEY = "mySecretKey";
 
-    private static long EXPIRATION_TIME = 60 * 60 * 1000;
+    private static long EXPIRATION_TIME = 2 * 24 * 60 * 60 * 1000;
 
     private static final KeyPair keyPair; // 如果使用RSA等非对称加密，需要生成密钥对
 
