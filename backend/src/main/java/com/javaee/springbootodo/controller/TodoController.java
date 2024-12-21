@@ -13,7 +13,7 @@ import java.util.List;
 
 // Controller for managing TodoEntity entities
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/")  // Allows CORS requests from the specified origin
+@CrossOrigin(origins ={"http://localhost:5173/", "http://47.99.66.142:5173"})  // Allows CORS requests from the specified origin
 public class TodoController {
 
     // Service for handling Todo operations
