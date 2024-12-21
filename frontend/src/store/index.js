@@ -5,25 +5,30 @@ const store = createStore({
         userId: localStorage.getItem('user-id') || null,
         token: localStorage.getItem('jwt-token') || null,
         isTokenValid: localStorage.getItem('isTokenValid') || null, // 新增状态字段，用于保存 token 是否有效
+        userName: localStorage.getItem('user-name') || null,
     },
     mutations: {
         // 设置用户信息和 token
-        setUser(state, { userId, token }) {
+        setUser(state, { userId, token, userName }) {
             state.userId = userId;
             state.token = token;
             state.isTokenValid = null; // 每次设置 token 时重置有效性验证
+            state.userName = userName;
             localStorage.setItem('user-id', userId);  // 保存到 localStorage
             localStorage.setItem('jwt-token', token);  // 保存到 localStorage
             localStorage.setItem('isTokenValid', null); // 保存到 localStorage
+            localStorage.setItem('user-name', userName);  // 保存到 localStorage
         },
         // 清除用户信息和 token
         clearUser(state) {
             state.userId = null;
             state.token = null;
             state.isTokenValid = null; // 清除验证结果
+            state.userName = null;
             localStorage.removeItem('user-id');  // 从 localStorage 移除
             localStorage.removeItem('jwt-token');  // 从 localStorage 移除
             localStorage.removeItem('isTokenValid'); // 从 localStorage 移除
+            localStorage.removeItem('user-name');  // 从 localStorage 移除
         },
         // 设置 token 是否有效
         setTokenValidity(state, isValid) {
@@ -43,11 +48,13 @@ const store = createStore({
             });
 
             if (response.ok) {
-                const data = await response.text();
-                const { userId, token } = { userId: id, token: data };
+                const data = await response.json();
+                const usertoken = data.token;
+                const username = data.username;
+                const { userId, token, userName } = { userId: id, token: usertoken, userName: username };
 
                 // 将 userId 和 token 保存到 Vuex 和 localStorage
-                commit('setUser', { userId, token });
+                commit('setUser', { userId, token, userName });
                 this.state.isTokenValid = true;
             } else {
                 console.error('登录失败，服务器认证未通过。');

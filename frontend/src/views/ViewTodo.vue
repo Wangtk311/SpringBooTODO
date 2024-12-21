@@ -8,7 +8,7 @@
 
       <!-- Header and add button -->
       <h1 class="text-center mb-4">查看待办</h1>
-      <a href="/add" class="btn btn-primary mb-3">添加新待办</a>
+      <a href="/add" class="btn btn-primary mb-3">添加待办</a>
 
       <!-- Scrollable container for the table -->
       <div class="table-container" v-if="todos.length > 0">
