@@ -18,19 +18,14 @@
 </template>
 
 <script setup>
-// 引入 Vuex store
 import { useStore } from 'vuex'
 import { ref } from 'vue'
 import { serverURL } from '../serverURLConfig.js';
 
-// 获取 Vuex store
 const store = useStore()
-
-// 定义表单输入字段
 const username = ref('')
 const password = ref('')
 
-// 注册处理函数
 const register = async () => {
   if (!username.value || !password.value) {
     alert('用户名或密码不能为空');

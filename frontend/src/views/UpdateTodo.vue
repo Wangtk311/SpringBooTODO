@@ -1,11 +1,10 @@
 <template>
   <main>
-    <Navbar />  <!-- Import and use Navbar component -->
+    <Navbar />
     <div class="my-5">
       <div class="mx-auto" style="max-width: 500px; width: 100%;">
-        <h1 class="text-center mb-4">编辑待办</h1>   <!-- Heading for the update page -->
+        <h1 class="text-center mb-4">编辑待办</h1>
         <form @submit.prevent="updateTodo">
-          <!-- Title Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="title" class="form-label" style="font-weight: bold;">待办标题</label>
@@ -14,7 +13,6 @@
             </div>
           </div>
 
-          <!-- Description Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="description" class="form-label" style="font-weight: bold;">详细内容</label>
@@ -23,7 +21,6 @@
             </div>
           </div>
 
-          <!-- Date Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="date" class="form-label" style="font-weight: bold;">截止日期</label>
@@ -32,7 +29,6 @@
             </div>
           </div>
 
-          <!-- Priority Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="priority" class="form-label" style="font-weight: bold;">优先级</label>
@@ -45,7 +41,6 @@
             </div>
           </div>
 
-          <!-- Completed Checkbox -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="completed" class="form-label" style="font-weight: bold;">标记为已完成</label>
@@ -55,12 +50,10 @@
             </div>
           </div>
 
-          <!-- Submit Button -->
           <div class="form-group">
             <button type="submit" class="btn btn-primary w-100">确认</button>
           </div>
 
-          <!-- Success/Error Message -->
           <div v-if="successMessage" class="alert alert-success">
             {{ successMessage }}
           </div>
@@ -77,14 +70,13 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
-import '../assets/styles.css'; // Import the new CSS file
+import '../assets/styles.css';
 import store from '../store/index';
 import { serverURL } from '../serverURLConfig.js';
 
 const route = useRoute();
 const router = useRouter();
 
-// Reactive variable for the todo object with Record type
 const todo = ref<Record<string, any>>({
   id: '',
   title: '',
@@ -98,7 +90,6 @@ const errors = ref<Record<string, string>>({});
 const successMessage = ref<string>('');
 const errorMessage = ref<string>('');
 
-// Fetch todo details from the server
 const getTodo = async () => {
   try {
     await store.dispatch('verifyToken');
@@ -114,7 +105,7 @@ const getTodo = async () => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send JWT token in the header
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
         'Content-Type': 'form-data'
       }
     });
@@ -122,20 +113,18 @@ const getTodo = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    todo.value = data;  // Update todo with fetched data
-    console.log(todo.value);  // Log todo data for debugging
+    todo.value = data;
+    console.log(todo.value);
   } catch (error) {
-    console.error('Error fetching todo:', error);   // Log errors
+    console.error('Error fetching todo:', error);
     errorMessage.value = 'Failed to fetch todo details.';
   }
 };
 
-// Validate form inputs
 const validateForm = () => {
-  errors.value = {};  // Reset errors
+  errors.value = {};
   let isValid = true;
 
-  // Title validation
   if (!todo.value.title.trim()) {
     errors.value.title = '必须提供一个标题';
     isValid = false;
@@ -144,7 +133,6 @@ const validateForm = () => {
     isValid = false;
   }
 
-  // Description validation
   if (!todo.value.description.trim()) {
     errors.value.description = '必须提供一段内容';
     isValid = false;
@@ -153,7 +141,6 @@ const validateForm = () => {
     isValid = false;
   }
 
-  // Date validation
   if (!todo.value.date) {
     errors.value.date = '必须提供一个截止日期';
     isValid = false;
@@ -162,7 +149,6 @@ const validateForm = () => {
     isValid = false;
   }
 
-  // Priority validation
   if (!todo.value.priority) {
     errors.value.priority = '必须指定一个优先级';
     isValid = false;
@@ -171,7 +157,6 @@ const validateForm = () => {
   return isValid;
 };
 
-// Update the todo on the server
 const updateTodo = async () => {
   if (validateForm()) {
     try {
@@ -183,29 +168,28 @@ const updateTodo = async () => {
         return;
       }
       const response = await fetch(serverURL + '/todo', {
-        method: 'PUT',  // HTTP method for updating existing todo
+        method: 'PUT',
         headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send JWT token in the header
-          'Content-Type': 'application/json'  // Specify JSON content type
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(todo.value)    // Convert todo object to JSON
+        body: JSON.stringify(todo.value)
       });
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      console.log(data);  // Log success message
+      console.log(data);
       successMessage.value = 'Todo updated successfully!';
-      errorMessage.value = ''; // Clear any previous errors
-      router.push('/');   // Redirect to home page after successful update
+      errorMessage.value = '';
+      router.push('/');
     } catch (error) {
       errorMessage.value = 'Error updating todo: ' + error.message;
-      successMessage.value = ''; // Clear any previous success messages
+      successMessage.value = '';
     }
   }
 };
 
-// Fetch todo details when component is mounted
 onMounted(() => {
   getTodo();
 });

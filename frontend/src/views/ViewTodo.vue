@@ -1,11 +1,8 @@
 <template>
   <main class="full-height">
-    <!-- Navbar component for navigation -->
     <Navbar />
 
-    <!-- Container for the main content -->
     <div class="full-width-container">
-      <!-- Header and add button -->
       <h1 class="text-center mb-4">{{ getUserName() }}的所有待办</h1>
       <div class="add-and-sort">
         <div class="sort-container">
@@ -16,16 +13,13 @@
           </select>
         </div>
       </div>
-      <!-- Scrollable container for the table -->
       <div class="uncompleted-text">未完成待办</div>
       <div class="table-container-no" v-if="uncomptodos.length > 0">
-        <!-- Table to display the list of todos -->
         <table class="table">
           <thead>
           <tr>
-            <!-- Table headers -->
             <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
-            <th scope="col" style="font-weight: bold; width: 80px">状态</th> <!-- 新增状态列 -->
+            <th scope="col" style="font-weight: bold; width: 80px">状态</th>
             <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
             <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
             <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
@@ -34,7 +28,6 @@
           </tr>
           </thead>
           <tbody>
-          <!-- Loop through each todo item and display in table rows -->
           <tr v-for="todo in uncomptodos" :key="todo.id">
             <td>
               <div :class="['priority-box', priorityClass(todo.priority)]">
@@ -61,12 +54,11 @@
       </div>
       <div class="completed-text">已完成待办</div>
       <div class="table-container-yes" v-if="comptodos.length > 0">
-        <!-- Table to display the list of todos -->
         <table class="table">
           <thead>
           <tr>
             <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
-            <th scope="col" style="font-weight: bold; width: 80px">状态</th> <!-- 新增状态列 -->
+            <th scope="col" style="font-weight: bold; width: 80px">状态</th>
             <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
             <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
             <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
@@ -105,7 +97,7 @@
 
 <script>
 import Navbar from '../components/Navbar.vue';
-import '../assets/styles.css'; // Import the new CSS file
+import '../assets/styles.css';
 import store from '../store/index';
 import { serverURL } from '../serverURLConfig.js';
 
@@ -121,26 +113,25 @@ export default {
   },
   data() {
     return {
-      uncomptodos: [],  // Array to store the list of todos
+      uncomptodos: [],
       comptodos: [],
-      sortMethod: 'priority',  // 默认按优先级排序
+      sortMethod: 'priority',
     }
   },
   methods: {
     getStatusClass(status) {
       if (status === '在将来') {
-        return 'status-future'; // 蓝色
+        return 'status-future';
       } else if (status === '已完成') {
-        return 'status-completed'; // 绿色
+        return 'status-completed';
       } else if (status === '已逾期') {
-        return 'status-overdue'; // 红色
+        return 'status-overdue';
       } else if (status === '较紧迫') {
-        return 'status-urgent'; // 橙色
+        return 'status-urgent';
       }
       return '';
     },
 
-    // Method to fetch todos from the server
     getTodos() {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -167,7 +158,7 @@ export default {
       }).then(data => {
         this.uncomptodos = data.map(todo => ({
           ...todo,
-          status: this.getTodoStatus(todo.date)  // 根据截止日期设置状态
+          status: this.getTodoStatus(todo.date)
         }));
         this.sortTodos();
       }).catch(error => console.error('Error fetching todos:', error));
@@ -197,7 +188,7 @@ export default {
       }).then(data => {
         this.comptodos = data.map(todo => ({
           ...todo,
-          status: '已完成'  // 已完成的待办直接设置为已完成
+          status: '已完成'
         }));
         this.sortTodos();
       }).catch(error => console.error('Error fetching todos:', error));
@@ -206,40 +197,35 @@ export default {
     getTodoStatus(date) {
       const currentDate = new Date();
       const deadlineDate = new Date(date);
-      const timeDifference = deadlineDate - currentDate; // 计算截止日期与当前时间的差值
-      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3天的毫秒数
+      const timeDifference = deadlineDate - currentDate;
+      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
 
       if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
-        return '较紧迫';  // 如果截止日期在未来 3 天内，返回“较紧迫”
+        return '较紧迫';
       } else if (deadlineDate < currentDate) {
-        return '已逾期';  // 如果截止日期已过去，返回“已逾期”
+        return '已逾期';
       } else {
-        return '在将来';  // 否则返回“在将来”
+        return '在将来';
       }
     },
 
-    // 定时检查未完成待办的状态
     checkTodosStatus() {
       const currentDate = new Date();
       this.uncomptodos.forEach(todo => {
         const deadlineDate = new Date(todo.date);
-        const timeDifference = deadlineDate - currentDate; // 计算截止日期与当前时间的差值
-        const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3天的毫秒数
+        const timeDifference = deadlineDate - currentDate;
+        const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
 
         if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
-          // 截止日期在未来3天内，设置为“较紧迫”
           todo.status = '较紧迫';
         } else if (deadlineDate < currentDate && todo.status !== '已逾期') {
-          // 截止日期已过，设置为“已逾期”
           todo.status = '已逾期';
         } else if (deadlineDate > currentDate && todo.status !== '较紧迫') {
-          // 截止日期在未来且不在3天内，设置为“在将来”
           todo.status = '在将来';
         }
       });
     },
 
-    // Method to sort todos by priority
     sortTodos() {
       if (this.sortMethod === 'priority') {
         this.uncomptodos = this.sortTodosByPriorityAndDate(this.uncomptodos);
@@ -250,27 +236,24 @@ export default {
       }
     },
 
-    // Method to sort todos by priority
     sortTodosByPriorityAndDate(todos) {
       const priorityOrder = { '高': 3, '中': 2, '低': 1 };
       return todos.sort((a, b) => {
         const priorityComparison = priorityOrder[b.priority] - priorityOrder[a.priority];
         if (priorityComparison !== 0) return priorityComparison;
-        return new Date(a.date) - new Date(b.date); // 如果优先级相同，按日期排序
+        return new Date(a.date) - new Date(b.date);
       });
     },
 
-    // Method to sort todos by deadline (date)
     sortTodosByDateAndPriority(todos) {
       return todos.sort((a, b) => {
         const dateComparison = new Date(a.date) - new Date(b.date);
         if (dateComparison !== 0) return dateComparison;
         const priorityOrder = { '高': 3, '中': 2, '低': 1 };
-        return priorityOrder[b.priority] - priorityOrder[a.priority]; // 如果日期相同，按优先级排序
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
       });
     },
 
-    // Method to delete a todo by its ID
     deleteTodo(id) {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -296,12 +279,11 @@ export default {
             return res.text();
           })
           .then(data => {
-            this.getTodos();  // Refresh the list after deletion
+            this.getTodos();
           })
           .catch(error => console.error('Error deleting todo:', error));
     },
 
-    // Method to toggle the completion status of a todo
     toggleCompletion(todo) {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -327,7 +309,7 @@ export default {
             return res.json();
           })
           .then(data => {
-            this.getTodos();  // Refresh the list after update
+            this.getTodos();
           })
           .catch(error => console.error('Error updating todo:', error));
     },
@@ -351,9 +333,8 @@ export default {
   },
 
   mounted() {
-    this.getTodos();  // Fetch todos when component is mounted
+    this.getTodos();
 
-    // 每分钟检查一次状态
     setInterval(() => {
       this.checkTodosStatus();
     }, 60000);

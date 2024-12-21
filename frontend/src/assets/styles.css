@@ -1,37 +1,32 @@
-/* General button styling */
 .btn {
-    margin-bottom: 0; /* Space below buttons */
+    margin-bottom: 0;
 }
-  
-/* Checkbox container styling */
+
 .checkbox-container {
-  margin-left: 10px; /* Space between label and checkbox */
+  margin-left: 10px;
 }
-  
-/* Larger checkbox styling */
+
 .large-checkbox {
-  transform: scale(1.5); /* Scales up the checkbox */
-  margin: 0.5rem; /* Space around the checkbox */
+  transform: scale(1.5);
+  margin: 0.5rem;
 }
 
-/* Full viewport height and flex layout */
 .full-height {
-  height: 100vh; /* Full height of viewport */
-  display: flex; /* Flexbox layout */
-  flex-direction: column; /* Vertical layout */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Full-width and scrollable table container */
 .table-container-no {
-    width: 100%; /* Full width */
-    max-height: 43vh; /* Maximum height */
-    overflow-y: auto; /* Vertical scrolling */
+    width: 100%;
+    max-height: 43vh;
+    overflow-y: auto;
 }
 
 .table-container-yes {
-    width: 100%; /* Full width */
-    max-height: 25vh; /* Maximum height */
-    overflow-y: auto; /* Vertical scrolling */
+    width: 100%;
+    max-height: 25vh;
+    overflow-y: auto;
 }
 
 .table td:last-child {
@@ -43,35 +38,35 @@
 }
 
 .status-future {
-    color: #57aee1 !important; /* 使用 !important 确保样式被应用 */
+    color: #57aee1 !important;
     font-weight: bold;
     padding: 5px;
     background: #222222;
 }
 
 .status-completed {
-    color: #0aa40a !important; /* 使用 !important 确保样式被应用 */
+    color: #0aa40a !important;
     font-weight: bold;
     padding: 5px;
     background: #222222;
 }
 
 .status-overdue {
-    color: #ff1010 !important; /* 使用 !important 确保样式被应用 */
+    color: #ff1010 !important;
     font-weight: bold;
     padding: 5px;
     background: #222222;
 }
 
 .status-urgent {
-    color: #f3c04a !important; /* 使用 !important 确保样式被应用 */
+    color: #f3c04a !important;
     font-weight: bold;
     padding: 5px;
     background: #222222;
 }
 
 .completed-text {
-    color: #000000; /* Gray text color */
+    color: #000000;
     font-size: 16px;
     padding: 5px;
     width: 100%;
@@ -80,7 +75,7 @@
 }
 
 .uncompleted-text {
-    color: #000000; /* Black text color */
+    color: #000000;
     font-size: 16px;
     padding: 5px;
     width: 100%;
@@ -88,72 +83,67 @@
     background-color: #f2f2f2;
 }
 
-/* Sticky table headers */
 thead th {
-    position: sticky; /* Fixes header position */
-    top: 0; /* Sticks to the top */
-    background: white; /* Background color */
-    z-index: 1; /* Layering */
-    border-bottom: 2px solid #dee2e6; /* Bottom border */
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+    border-bottom: 2px solid #dee2e6;
 }
-  
-/* Full-width container with padding */
+
 .full-width-container {
-  width: 100%; /* Full width */
-  padding: 1rem; /* Padding */
-  box-sizing: border-box; /* Includes padding in width */
-  overflow: hidden; /* Hides overflow */
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
 }
-  
-/* Full-width table with top margin */
+
 .table {
-  width: 100%; /* Full width */
-  margin-top: 1.22rem; /* Margin above table */
+  width: 100%;
+  margin-top: 1.22rem;
 }
-  
-/* Error and alert message styles */
+
 .text-danger {
-    color: #dc3545; /* Error color */
+    color: #dc3545;
 }
 
 .alert-success {
-    color: #155724; /* Success text color */
-    background-color: #d4edda; /* Success background */
-    border-color: #c3e6cb; /* Success border */
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
 }
 
 .alert-danger {
-    color: #721c24; /* Danger text color */
-    background-color: #f8d7da; /* Danger background */
-    border-color: #f5c6cb; /* Danger border */
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
 }
 
-/* Priority box styles */
 .priority-box {
-    width: 36px; /* Width */
-    height: 36px; /* Height */
-    padding: 5px; /* Padding */
-    border-radius: 50%; /* Rounded corners */
-    text-align: center; /* Centered text */
-    color: white; /* White text */
-    font-weight: bold; /* Bold text */
-    display: inline-block; /* Inline block */
+    width: 36px;
+    height: 36px;
+    padding: 5px;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
 }
 
 .priority-low {
-    background-color: green; /* Low priority color */
+    background-color: green;
 }
 
 .priority-medium {
-    background-color: orange; /* Medium priority color */
+    background-color: orange;
 }
 
 .priority-high {
-    background-color: red; /* High priority color */
+    background-color: red;
 }
 
 .no-todos {
-    color: #000000; /* Black text color */
+    color: #000000;
     font-size: 16px;
     padding: 5px;
     width: 100%;
@@ -162,7 +152,7 @@ thead th {
 }
 
 .sort-container {
-    justify-content: space-between; /* 元素左对齐 */
-    display: flex;                /* Flex布局 */
-    margin-bottom: 1rem;         /* Space below */
+    justify-content: space-between;
+    display: flex;
+    margin-bottom: 1rem;
 }

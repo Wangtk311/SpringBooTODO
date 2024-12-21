@@ -5,10 +5,7 @@
       <div class="mx-auto" style="max-width: 500px; width: 100%;">
         <h1 class="text-center mb-4">添加新待办</h1>
         <form @submit.prevent="addTodo">
-          <!-- Hidden ID Field -->
           <input type="hidden" v-model="todo.id">
-
-          <!-- Title -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="title" class="form-label" style="font-weight: bold;">待办标题</label>
@@ -16,8 +13,6 @@
               <span class="text-danger" v-if="errors.title">{{ errors.title }}</span>
             </div>
           </div>
-
-          <!-- Description -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="description" class="form-label" style="font-weight: bold;">详细内容</label>
@@ -25,8 +20,6 @@
               <span class="text-danger" v-if="errors.description">{{ errors.description }}</span>
             </div>
           </div>
-
-          <!-- Date Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="date" class="form-label" style="font-weight: bold;">截止日期</label>
@@ -34,8 +27,6 @@
               <span class="text-danger" v-if="errors.date">{{ errors.date }}</span>
             </div>
           </div>
-
-          <!-- Priority Field -->
           <div class="row">
             <div class="col-md-12 form-group mb-3">
               <label for="priority" class="form-label" style="font-weight: bold;">优先级</label>
@@ -47,16 +38,10 @@
               <span class="text-danger" v-if="errors.priority">{{ errors.priority }}</span>
             </div>
           </div>
-
-          <!-- Hidden Fields for Completion Status -->
           <input type="hidden" v-model="todo.completed">
-
-          <!-- Submit Button -->
           <div class="form-group">
             <button type="submit" class="btn btn-primary w-100">确认</button>
           </div>
-
-          <!-- Success/Error Message -->
           <div v-if="successMessage" class="alert alert-success">
             {{ successMessage }}
           </div>
@@ -70,28 +55,27 @@
 </template>
 
 <script>
-import Navbar from '../components/Navbar.vue';  // Import the Navbar component
+import Navbar from '../components/Navbar.vue';
 import '../assets/styles.css';
-import store from "@/store/index.js"; // Import the CSS file
+import store from "@/store/index.js";
 import { serverURL } from '../serverURLConfig.js';
 
 export default {
   name: 'AddTodo',
   components: {
-    Navbar  // Register the Navbar component
+    Navbar
   },
 
   data() {
     return {
-      // Initial state for the todo object
       todo: {
         id: null,
         title: '',
         description: '',
         date: '',
-        priority: '低', // Default priority
-        completed: 'false', // Default completed
-        userid: localStorage.getItem('user-id')  // Get the user ID from local storage
+        priority: '低',
+        completed: 'false',
+        userid: localStorage.getItem('user-id')
       },
       errors: {},
       successMessage: '',
@@ -100,12 +84,10 @@ export default {
   },
 
   methods: {
-    // Method to validate the form fields
     validateForm() {
-      this.errors = {};  // Reset errors
+      this.errors = {};
       let isValid = true;
 
-      // Title validation
       if (!this.todo.title.trim()) {
         this.errors.title = '必须提供一个标题';
         isValid = false;
@@ -114,7 +96,6 @@ export default {
         isValid = false;
       }
 
-      // Description validation
       if (!this.todo.description.trim()) {
         this.errors.description = '必须提供一段内容';
         isValid = false;
@@ -123,7 +104,6 @@ export default {
         isValid = false;
       }
 
-      // Date validation
       if (!this.todo.date) {
         this.errors.date = '必须提供一个截止日期';
         isValid = false;
@@ -132,48 +112,44 @@ export default {
         isValid = false;
       }
 
-      // Priority validation (optional)
       if (!this.todo.priority) {
         this.errors.priority = '必须指定一个优先级';
         isValid = false;
       }
 
-      return isValid; // Return the validity status of the form
+      return isValid;
     },
 
-    // Method to add a new todo item
     addTodo() {
-      if (this.validateForm()) {  // Only proceed if the form is valid
-        // Send a POST request to the server to add a new todo
-        store.dispatch('verifyToken');  // Verify the token before making the request
+      if (this.validateForm()) {
+        store.dispatch('verifyToken');
         if (!store.state.isTokenValid) {
-          alert('登录状态已超时，请重新登录！');  // Alert the user to login
-          store.dispatch('logout');  // Logout the user
-          this.$router.push('/login');  // Redirect to the login page
+          alert('登录状态已超时，请重新登录！');
+          store.dispatch('logout');
+          this.$router.push('/login');
         } else {
           fetch(serverURL + '/todo', {
             method: 'POST',
             headers: {
-              'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
-              'Content-Type': 'application/json'  // Send data as JSON
+              'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify(this.todo)
           })
-              // Handle the server response
               .then(res => {
                 if (!res.ok) {
-                  throw new Error('Network response was not ok'); // Handle network errors
+                  throw new Error('Network response was not ok');
                 }
-                return res.text();  // Return response text
+                return res.text();
               })
               .then(data => {
-                this.successMessage = 'Todo added successfully!';   // Success message
-                this.errorMessage = ''; // Clear any previous errors
-                this.$router.push("/"); // Redirect to the home page
+                this.successMessage = 'Todo added successfully!';
+                this.errorMessage = '';
+                this.$router.push("/");
               })
               .catch(error => {
-                this.errorMessage = 'Error adding todo: ' + error.message;  // Error message
-                this.successMessage = ''; // Clear any previous success messages
+                this.errorMessage = 'Error adding todo: ' + error.message;
+                this.successMessage = '';
               });
         }
       }

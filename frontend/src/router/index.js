@@ -1,43 +1,40 @@
-// Import Vue Router functions and components
 import { createRouter, createWebHistory } from 'vue-router';
 import { useStore } from 'vuex'
 
-// Create and configure the router
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL), // Use HTML5 History API
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/login', // Path for the login page
-      name: 'login', // Route name
-      component: () => import('../views/Login.vue') // Lazy-load component
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/Login.vue')
     },
     {
-      path: '/register', // Path for the register page
-      name: 'register', // Route name
-      component: () => import('../views/Register.vue') // Lazy
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/Register.vue')
     },
     {
-      path: '/', // Root path
-      name: 'home', // Route name
-      component: () => import('../views/ViewTodo.vue'), // Component for this route
+      path: '/',
+      name: 'home',
+      component: () => import('../views/ViewTodo.vue'),
       meta: { requiresAuth: true }
     },
     {
-      path: '/add', // Path for adding a new todo
-      name: 'add', // Route name
-      component: () => import('../views/AddTodo.vue'), // Lazy-load component
+      path: '/add',
+      name: 'add',
+      component: () => import('../views/AddTodo.vue'),
       meta: { requiresAuth: true }
     },
     {
-      path: '/edit/:id', // Path for editing a specific todo
-      name: 'edit', // Route name
-      component: () => import('../views/UpdateTodo.vue'), // Lazy-load component
+      path: '/edit/:id',
+      name: 'edit',
+      component: () => import('../views/UpdateTodo.vue'),
       meta: { requiresAuth: true }
     }
   ]
 });
 
-// Add a navigation guard to check if the route requires authentication
 router.beforeEach((to, from, next) => {
   console.log("To route:", to.name);
   const store = useStore()
@@ -46,12 +43,11 @@ router.beforeEach((to, from, next) => {
     if (store.getters.isAuthorized) {
       next();
     } else {
-      next('/login'); // 如果 token 无效，跳转到登录页面
+      next('/login');
     }
   } else {
     next();
   }
 });
 
-// Export the router instance
 export default router;
