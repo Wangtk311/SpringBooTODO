@@ -31,6 +31,17 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.findAllByUserid(theUserId);
     }
 
+    @Override
+    public List<TodoEntity> findCompltdByUserId(int theUserId) {
+
+        return todoRepository.findAllByUseridAndCompletedTrue(theUserId);
+    }
+
+    @Override
+    public List<TodoEntity> findUnCompltByUserId(int theUserId) {
+        return todoRepository.findAllByUseridAndCompletedFalse(theUserId);
+    }
+
     // Retrieve a Todo entry by its ID
     @Override
     public TodoEntity findById(int theId) {

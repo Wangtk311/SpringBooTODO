@@ -109,6 +109,49 @@ public class TodoController {
 
     }
 
+
+    @GetMapping("/todocompleted")
+    public List<TodoEntity> getTodosComptld(int userid, HttpServletRequest request) {
+        // 从请求头中获取Token
+        String header = request.getHeader("Authorization");
+        System.out.println("header.startsWith(\"Bearer \")");
+        String token = header.substring(7); // 去除"Bearer "前缀
+
+        // 从Token中提取用户名
+        String usernameFromToken = JwtUtils.getUsernameFromTokenAsymmetric(token);
+
+        // 根据用户名获取userid
+        int userIdFromToken = Integer.parseInt((usernameFromToken));
+
+        // 判断token中的userid和请求参数中的userid是否一致
+        if (userIdFromToken == userid) {
+            return todoService.findCompltdByUserId(userid);
+        }
+        return null;
+
+    }
+
+    @GetMapping("/todouncomplete")
+    public List<TodoEntity> getTodosUnComptle(int userid, HttpServletRequest request) {
+        // 从请求头中获取Token
+        String header = request.getHeader("Authorization");
+        System.out.println("header.startsWith(\"Bearer \")");
+        String token = header.substring(7); // 去除"Bearer "前缀
+
+        // 从Token中提取用户名
+        String usernameFromToken = JwtUtils.getUsernameFromTokenAsymmetric(token);
+
+        // 根据用户名获取userid
+        int userIdFromToken = Integer.parseInt((usernameFromToken));
+
+        // 判断token中的userid和请求参数中的userid是否一致
+        if (userIdFromToken == userid) {
+            return todoService.findUnCompltByUserId(userid);
+        }
+        return null;
+
+    }
+
     // Endpoint to update an existing Todo
     @PutMapping("/todo")
     public ResponseEntity<TodoEntity> updateTodo(@Valid @RequestBody TodoEntity todoEntity, BindingResult bindingResult, HttpServletRequest request) {

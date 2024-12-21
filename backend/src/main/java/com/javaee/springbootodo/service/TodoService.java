@@ -11,6 +11,10 @@ public interface TodoService {
 
     List<TodoEntity> findAllByUserId(int theUserId);
 
+    List<TodoEntity> findCompltdByUserId(int theUserId);
+
+    List<TodoEntity> findUnCompltByUserId(int theUserId);
+
     // Retrieve a Todo entry by its ID
     TodoEntity findById(int theId);
 
