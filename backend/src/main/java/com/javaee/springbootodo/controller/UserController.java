@@ -61,14 +61,18 @@ public class UserController {
 //    }
 
     @PostMapping("/login")
-    public  ResponseEntity<String> login(@RequestBody LoginRequest lrq) {
+    public  ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest lrq) {
         System.out.println("登录校验");
         System.out.println(lrq.getId());
+
+        // 创建响应消息
+        Map<String, Object> response = new HashMap<>();
 
         UserEntity user = userService.findById(lrq.getId());
         if(user == null) {
             System.out.println("用户不存在");
-            return new ResponseEntity<>("用户不存在", HttpStatus.NOT_FOUND); // 状态码 404 用户不存在
+            response.put("message", "用户不存在");
+            return ResponseEntity.badRequest().body(response);// 状态码 404 用户不存在
         }
         String pswd = userService.getPassword(user);
 
@@ -79,16 +83,22 @@ public class UserController {
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(lrq.getId(), lrq.getPassword()));
                 // 生成 JWT Token
                 String token = JwtUtils.generateTokenAsymmetric(String.valueOf(lrq.getId()));
-                return new ResponseEntity<>(token, HttpStatus.OK);  // 状态码 200 登录成功
+                String name = userService.GetName(user);
+                response.put("message", "登录成功");
+                response.put("token", token);
+                response.put("username", name);
+                return ResponseEntity.ok().body(response); // 状态码 200 登录成功
             }catch (Exception e) {
                 System.out.println("登录校验失败");
+                response.put("message", "登录校验失败");
                 // 返回状态码 500 (Internal Server Error) 其他异常
-                return new ResponseEntity<>("登录校验失败", HttpStatus.INTERNAL_SERVER_ERROR);
+                return ResponseEntity.badRequest().body(response);
             }
         }
         else {
-            // 返回状态码 401 (Unauthorized) 密码错误
-            return new ResponseEntity<>("密码错误", HttpStatus.UNAUTHORIZED);
+            // 返回状态码 400 (Unauthorized) 密码错误
+            response.put("message", "密码错误");
+            return ResponseEntity.badRequest().body(response);
         }
     }
 
@@ -100,6 +110,7 @@ public class UserController {
         String token = header.substring(7); // 去除"Bearer "前缀
         return new ResponseEntity<>(JwtUtils.validateTokenAsymmetric(token), HttpStatus.OK);
     }
+
 
 }
 

@@ -23,4 +23,6 @@ public interface UserService {
     int getId(UserEntity theUser);
 
     String getPassword(UserEntity user);
+
+    String GetName(UserEntity theUser);
 }

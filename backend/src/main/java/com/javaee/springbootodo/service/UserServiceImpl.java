@@ -65,4 +65,9 @@ public class UserServiceImpl implements UserService {
     public String getPassword(UserEntity theUser) {
         return theUser.getPassword();
     }
+
+    @Override
+    public String GetName(UserEntity theUser) {
+        return theUser.getName();
+    }
 }
