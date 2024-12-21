@@ -22,3 +22,9 @@
 .full-width-navbar .nav-link:hover {
     color: #9b9b9b; /* Change this color to your desired hover link color */
 }
+
+.user-text {
+    font-size: 16px; /* Font size */
+    padding: 8px; /* Space below */
+    color: rgb(0, 0, 0);
+}

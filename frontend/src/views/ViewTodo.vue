@@ -11,31 +11,32 @@
       <a href="/add" class="btn btn-primary mb-3">添加待办</a>
 
       <!-- Scrollable container for the table -->
-      <div class="table-container" v-if="todos.length > 0">
+      <div class="uncompleted-text">未完成待办</div>
+      <div class="table-container-no" v-if="uncomptodos.length > 0">
         <!-- Table to display the list of todos -->
         <table class="table">
           <thead>
           <tr>
             <!-- Table headers -->
+            <th scope="col" style="font-weight: bold;">优先级</th>
             <th scope="col" style="font-weight: bold;">待办标题</th>
             <th scope="col" style="font-weight: bold;">待办内容</th>
             <th scope="col" style="font-weight: bold;">截止时间</th>
-            <th scope="col" style="font-weight: bold;">优先级</th>
             <th scope="col" style="font-weight: bold;">是否完成</th>
             <th scope="col" style="font-weight: bold;">操作</th>
           </tr>
           </thead>
           <tbody>
           <!-- Loop through each todo item and display in table rows -->
-          <tr v-for="todo in todos" :key="todo.id">
-            <td>{{ todo.title }}</td>
-            <td>{{ todo.description }}</td>
-            <td>{{ todo.date }}</td>
+          <tr v-for="todo in uncomptodos" :key="todo.id">
             <td>
               <div :class="['priority-box', priorityClass(todo.priority)]">
                 {{ todo.priority }}
               </div>
             </td>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.description }}</td>
+            <td>{{ todo.date }}</td>
             <td>
               <!-- Checkbox to mark the todo as completed or not -->
               <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
@@ -48,6 +49,51 @@
           </tr>
           </tbody>
         </table>
+      </div>
+      <div class="no-todos" v-else>
+        暂无未完成待办
+      </div>
+      <div class="completed-text">已完成待办</div>
+      <div class="table-container-yes" v-if="comptodos.length > 0">
+        <!-- Table to display the list of todos -->
+        <table class="table">
+          <thead>
+          <tr>
+            <!-- Table headers -->
+            <th scope="col" style="font-weight: bold;">优先级</th>
+            <th scope="col" style="font-weight: bold;">待办标题</th>
+            <th scope="col" style="font-weight: bold;">待办内容</th>
+            <th scope="col" style="font-weight: bold;">截止时间</th>
+            <th scope="col" style="font-weight: bold;">是否完成</th>
+            <th scope="col" style="font-weight: bold;">操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Loop through each todo item and display in table rows -->
+          <tr v-for="todo in comptodos" :key="todo.id">
+            <td>
+              <div :class="['priority-box', priorityClass(todo.priority)]">
+                {{ todo.priority }}
+              </div>
+            </td>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.description }}</td>
+            <td>{{ todo.date }}</td>
+            <td>
+              <!-- Checkbox to mark the todo as completed or not -->
+              <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
+            </td>
+            <td>
+              <!-- Buttons for editing and deleting a todo -->
+              <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+              <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="no-todos" v-else>
+        暂无已完成待办
       </div>
     </div>
   </main>
@@ -64,16 +110,17 @@ export default {
   },
   data() {
     return {
-      todos: []  // Array to store the list of todos
+      uncomptodos: [],  // Array to store the list of todos
+      comptodos: []
     }
   },
   methods: {
     // Method to fetch todos from the server
     getTodos() {
-      const url = new URL('http://localhost:8080/todo');
-      const param = { userid: localStorage.getItem('user-id') };
-      Object.keys(param).forEach(key => url.searchParams.append(key, param[key]));
-      fetch(url, {
+      const url1 = new URL('http://localhost:8080/todouncomplete');
+      const param1 = { userid: localStorage.getItem('user-id') };
+      Object.keys(param1).forEach(key => url1.searchParams.append(key, param1[key]));
+      fetch(url1, {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
@@ -86,7 +133,28 @@ export default {
             return res.json();  // Parse the response as JSON
           })
           .then(data => {
-            this.todos = data; // Update the todos data
+            this.uncomptodos = data; // Update the todos data
+            console.log("Fetched todos:", data);
+          })
+          .catch(error => console.error('Error fetching todos:', error));
+
+      const url2 = new URL('http://localhost:8080/todocompleted');
+      const param2 = { userid: localStorage.getItem('user-id') };
+      Object.keys(param2).forEach(key => url2.searchParams.append(key, param2[key]));
+      fetch(url2, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt-token'),  // Send the token in the header
+          'Content-Type': 'form-data'
+        }
+      }).then(res => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();  // Parse the response as JSON
+      })
+          .then(data => {
+            this.comptodos = data; // Update the todos data
             console.log("Fetched todos:", data);
           })
           .catch(error => console.error('Error fetching todos:', error));

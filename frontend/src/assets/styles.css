@@ -22,10 +22,34 @@
 }
 
 /* Full-width and scrollable table container */
-.table-container {
+.table-container-no {
     width: 100%; /* Full width */
-    max-height: 78vh; /* Maximum height */
+    max-height: 45vh; /* Maximum height */
     overflow-y: auto; /* Vertical scrolling */
+}
+
+.table-container-yes {
+    width: 100%; /* Full width */
+    max-height: 23vh; /* Maximum height */
+    overflow-y: auto; /* Vertical scrolling */
+}
+
+.completed-text {
+    color: #000000; /* Gray text color */
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.uncompleted-text {
+    color: #000000; /* Black text color */
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #f2f2f2;
 }
 
 /* Sticky table headers */
@@ -90,4 +114,13 @@ thead th {
 
 .priority-high {
     background-color: red; /* High priority color */
+}
+
+.no-todos {
+    color: #000000; /* Black text color */
+    font-size: 16px;
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+    background-color: #ffffff;
 }

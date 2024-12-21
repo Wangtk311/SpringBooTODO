@@ -24,13 +24,7 @@
 </template>
 
 <!-- Import the external CSS file -->
-<style src="../assets/navbar.css">
-.user-text {
-  font-size: 16px; /* Font size */
-  margin-bottom: 1rem; /* Space below */
-  color: rgb(0, 0, 0);
-}
-</style>
+<style src="../assets/navbar.css"></style>
 
 <script>
 import store from '../store/index';
