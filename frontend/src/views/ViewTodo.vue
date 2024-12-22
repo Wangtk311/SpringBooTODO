@@ -8,88 +8,90 @@
         <div class="sort-container">
           <a href="/add" class="btn btn-primary">添加待办</a>
           <select id="sortBy" v-model="sortMethod" @change="sortTodos">
-            <option value="priority">按优先级别排序</option>
             <option value="date">按截止时间排序</option>
+            <option value="priority">按优先级别排序</option>
           </select>
         </div>
       </div>
-      <div class="uncompleted-text">未完成待办</div>
-      <div class="table-container-no" v-if="uncomptodos.length > 0">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
-            <th scope="col" style="font-weight: bold; width: 80px">状态</th>
-            <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
-            <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
-            <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
-            <th scope="col" style="font-weight: bold;">是否完成</th>
-            <th scope="col" style="font-weight: bold;"> </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="todo in uncomptodos" :key="todo.id">
-            <td>
-              <div :class="['priority-box', priorityClass(todo.priority)]">
-                {{ todo.priority }}
-              </div>
-            </td>
-            <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
-            <td>{{ todo.title }}</td>
-            <td :class="getDeadlineClass(todo.date)">{{ todo.date }}</td>
-            <td>{{ todo.description }}</td>
-            <td>
-              <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
-            </td>
-            <td>
-              <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
-              <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="no-todos" v-else>
-        暂无未完成待办
-      </div>
-      <div class="completed-text">已完成待办</div>
-      <div class="table-container-yes" v-if="comptodos.length > 0">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
-            <th scope="col" style="font-weight: bold; width: 80px">状态</th>
-            <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
-            <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
-            <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
-            <th scope="col" style="font-weight: bold;">是否完成</th>
-            <th scope="col" style="font-weight: bold;"> </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="todo in comptodos" :key="todo.id">
-            <td>
-              <div :class="['priority-box', priorityClass(todo.priority)]">
-                {{ todo.priority }}
-              </div>
-            </td>
-            <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
-            <td>{{ todo.title }}</td>
-            <td>{{ todo.date }}</td>
-            <td>{{ todo.description }}</td>
-            <td>
-              <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
-            </td>
-            <td>
-              <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
-              <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="no-todos" v-else>
-        暂无已完成待办
+      <div class="scrollable-table">
+        <div class="uncompleted-text">未完成待办</div>
+        <div class="table-container-no" v-if="uncomptodos.length > 0">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
+              <th scope="col" style="font-weight: bold; width: 80px">状态</th>
+              <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
+              <th scope="col" style="font-weight: bold; width: 170px">待办标题</th>
+              <th scope="col" style="font-weight: bold; width: 770px">详细内容</th>
+              <th scope="col" style="font-weight: bold;">标记为完成</th>
+              <th scope="col" style="font-weight: bold;"> </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="todo in uncomptodos" :key="todo.id">
+              <td>
+                <div :class="['priority-box', priorityClass(todo.priority)]">
+                  {{ todo.priority }}
+                </div>
+              </td>
+              <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
+              <td :class="getDeadlineClass(todo.date)">{{ todo.date }}</td>
+              <td style="font-weight: bold">{{ todo.title }}</td>
+              <td>{{ todo.description }}</td>
+              <td>
+                <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
+              </td>
+              <td>
+                <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+                <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="no-todos" v-else>
+          暂无未完成待办
+        </div>
+        <div class="completed-text">已完成待办</div>
+        <div class="table-container-yes" v-if="comptodos.length > 0">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
+              <th scope="col" style="font-weight: bold; width: 80px">状态</th>
+              <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
+              <th scope="col" style="font-weight: bold; width: 170px">待办标题</th>
+              <th scope="col" style="font-weight: bold; width: 770px">详细内容</th>
+              <th scope="col" style="font-weight: bold;">标记为完成</th>
+              <th scope="col" style="font-weight: bold;"> </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="todo in comptodos" :key="todo.id">
+              <td>
+                <div :class="['priority-box', priorityClass(todo.priority)]">
+                  {{ todo.priority }}
+                </div>
+              </td>
+              <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
+              <td>{{ todo.date }}</td>
+              <td style="text-decoration: line-through !important;">{{ todo.title }}</td>
+              <td style="text-decoration: line-through !important;">{{ todo.description }}</td>
+              <td>
+                <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
+              </td>
+              <td>
+                <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+                <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="no-todos" v-else>
+          暂无已完成待办
+        </div>
       </div>
     </div>
   </main>
@@ -115,7 +117,7 @@ export default {
     return {
       uncomptodos: [],
       comptodos: [],
-      sortMethod: 'priority',
+      sortMethod: 'date',
     }
   },
   methods: {

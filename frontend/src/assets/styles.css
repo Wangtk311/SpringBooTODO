@@ -17,16 +17,22 @@
   flex-direction: column;
 }
 
+.scrollable-table {
+    max-height: 75vh;
+    overflow-y: scroll;
+    padding-right: 20px;
+}
+
 .table-container-no {
     width: 100%;
-    max-height: 43vh;
-    overflow-y: auto;
+    max-height: 67vh;
+    overflow-y: scroll;
 }
 
 .table-container-yes {
     width: 100%;
-    max-height: 25vh;
-    overflow-y: auto;
+    max-height: 67vh;
+    overflow-y: scroll;
 }
 
 .table td:last-child {
