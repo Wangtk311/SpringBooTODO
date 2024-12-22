@@ -41,9 +41,9 @@ public class UserController {
         //System.out.println(user.toString());
         // 2. 对密码进行加密
         String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+        UserEntity puser = userService.SetPassword(user, encodedPassword);
 
-        UserEntity savedUser = userService.save(user);
+        UserEntity savedUser = userService.save(puser);
 
         // 创建响应消息
         Map<String, Object> response = new HashMap<>();

@@ -70,4 +70,10 @@ public class UserServiceImpl implements UserService {
     public String GetName(UserEntity theUser) {
         return theUser.getName();
     }
+
+    @Override
+    public UserEntity SetPassword(UserEntity theUser, String password) {
+        theUser.setPassword(password);
+        return theUser;
+    }
 }

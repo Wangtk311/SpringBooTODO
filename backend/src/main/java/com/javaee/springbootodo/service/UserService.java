@@ -25,4 +25,6 @@ public interface UserService {
     String getPassword(UserEntity user);
 
     String GetName(UserEntity theUser);
+
+    UserEntity SetPassword(UserEntity theUser, String password);
 }
