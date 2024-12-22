@@ -1,103 +1,97 @@
 <template>
   <main class="full-height">
-    <!-- Navbar component for navigation -->
     <Navbar />
 
-    <!-- Container for the main content -->
     <div class="full-width-container">
-      <!-- Header and add button -->
       <h1 class="text-center mb-4">{{ getUserName() }}的所有待办</h1>
       <div class="add-and-sort">
         <div class="sort-container">
           <a href="/add" class="btn btn-primary">添加待办</a>
           <select id="sortBy" v-model="sortMethod" @change="sortTodos">
-            <option value="priority">按优先级排序</option>
             <option value="date">按截止时间排序</option>
+            <option value="priority">按优先级别排序</option>
           </select>
         </div>
       </div>
-      <!-- Scrollable container for the table -->
-      <div class="uncompleted-text">未完成待办</div>
-      <div class="table-container-no" v-if="uncomptodos.length > 0">
-        <!-- Table to display the list of todos -->
-        <table class="table">
-          <thead>
-          <tr>
-            <!-- Table headers -->
-            <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
-            <th scope="col" style="font-weight: bold; width: 80px">状态</th> <!-- 新增状态列 -->
-            <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
-            <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
-            <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
-            <th scope="col" style="font-weight: bold;">是否完成</th>
-            <th scope="col" style="font-weight: bold;"> </th>
-          </tr>
-          </thead>
-          <tbody>
-          <!-- Loop through each todo item and display in table rows -->
-          <tr v-for="todo in uncomptodos" :key="todo.id">
-            <td>
-              <div :class="['priority-box', priorityClass(todo.priority)]">
-                {{ todo.priority }}
-              </div>
-            </td>
-            <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
-            <td>{{ todo.title }}</td>
-            <td>{{ todo.date }}</td>
-            <td>{{ todo.description }}</td>
-            <td>
-              <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
-            </td>
-            <td>
-              <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
-              <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="no-todos" v-else>
-        暂无未完成待办
-      </div>
-      <div class="completed-text">已完成待办</div>
-      <div class="table-container-yes" v-if="comptodos.length > 0">
-        <!-- Table to display the list of todos -->
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
-            <th scope="col" style="font-weight: bold; width: 80px">状态</th> <!-- 新增状态列 -->
-            <th scope="col" style="font-weight: bold; width: 200px">待办标题</th>
-            <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
-            <th scope="col" style="font-weight: bold; width: 810px">详细内容</th>
-            <th scope="col" style="font-weight: bold;">是否完成</th>
-            <th scope="col" style="font-weight: bold;"> </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="todo in comptodos" :key="todo.id">
-            <td>
-              <div :class="['priority-box', priorityClass(todo.priority)]">
-                {{ todo.priority }}
-              </div>
-            </td>
-            <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
-            <td>{{ todo.title }}</td>
-            <td>{{ todo.date }}</td>
-            <td>{{ todo.description }}</td>
-            <td>
-              <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
-            </td>
-            <td>
-              <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
-              <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="no-todos" v-else>
-        暂无已完成待办
+      <div class="scrollable-table">
+        <div class="uncompleted-text">未完成待办</div>
+        <div class="table-container-no" v-if="uncomptodos.length > 0">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
+              <th scope="col" style="font-weight: bold; width: 80px">状态</th>
+              <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
+              <th scope="col" style="font-weight: bold; width: 170px">待办标题</th>
+              <th scope="col" style="font-weight: bold; width: 770px">详细内容</th>
+              <th scope="col" style="font-weight: bold;">标记为完成</th>
+              <th scope="col" style="font-weight: bold;"> </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="todo in uncomptodos" :key="todo.id">
+              <td>
+                <div :class="['priority-box', priorityClass(todo.priority)]">
+                  {{ todo.priority }}
+                </div>
+              </td>
+              <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
+              <td :class="getDeadlineClass(todo.date)">{{ todo.date }}</td>
+              <td style="font-weight: bold">{{ todo.title }}</td>
+              <td>{{ todo.description }}</td>
+              <td>
+                <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
+              </td>
+              <td>
+                <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+                <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="no-todos" v-else>
+          暂无未完成待办
+        </div>
+        <div class="completed-text">已完成待办</div>
+        <div class="table-container-yes" v-if="comptodos.length > 0">
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col" style="font-weight: bold; width: 80px">优先级</th>
+              <th scope="col" style="font-weight: bold; width: 80px">状态</th>
+              <th scope="col" style="font-weight: bold; width: 120px">截止时间</th>
+              <th scope="col" style="font-weight: bold; width: 170px">待办标题</th>
+              <th scope="col" style="font-weight: bold; width: 770px">详细内容</th>
+              <th scope="col" style="font-weight: bold;">标记为完成</th>
+              <th scope="col" style="font-weight: bold;"> </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="todo in comptodos" :key="todo.id">
+              <td>
+                <div :class="['priority-box', priorityClass(todo.priority)]">
+                  {{ todo.priority }}
+                </div>
+              </td>
+              <td :class="getStatusClass(todo.status)">{{ todo.status }}</td>
+              <td>{{ todo.date }}</td>
+              <td style="text-decoration: line-through !important;">{{ todo.title }}</td>
+              <td style="text-decoration: line-through !important;">{{ todo.description }}</td>
+              <td>
+                <input type="checkbox" class="large-checkbox" :checked="todo.completed" @change="toggleCompletion(todo)"/>
+              </td>
+              <td>
+                <a class="btn btn-primary" :href="`/edit/${todo.id}`">编辑</a>
+                <button class="btn btn-danger mx-2" @click="deleteTodo(todo.id)">删除</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="no-todos" v-else>
+          暂无已完成待办
+        </div>
       </div>
     </div>
   </main>
@@ -105,7 +99,7 @@
 
 <script>
 import Navbar from '../components/Navbar.vue';
-import '../assets/styles.css'; // Import the new CSS file
+import '../assets/styles.css';
 import store from '../store/index';
 import { serverURL } from '../serverURLConfig.js';
 
@@ -121,26 +115,39 @@ export default {
   },
   data() {
     return {
-      uncomptodos: [],  // Array to store the list of todos
+      uncomptodos: [],
       comptodos: [],
-      sortMethod: 'priority',  // 默认按优先级排序
+      sortMethod: 'date',
     }
   },
   methods: {
     getStatusClass(status) {
       if (status === '在将来') {
-        return 'status-future'; // 蓝色
+        return 'status-future';
       } else if (status === '已完成') {
-        return 'status-completed'; // 绿色
+        return 'status-completed';
       } else if (status === '已逾期') {
-        return 'status-overdue'; // 红色
+        return 'status-overdue';
       } else if (status === '较紧迫') {
-        return 'status-urgent'; // 橙色
+        return 'status-urgent';
       }
       return '';
     },
 
-    // Method to fetch todos from the server
+    getDeadlineClass(date) {
+      const currentDate = new Date();
+      const deadlineDate = new Date(date);
+      const timeDifference = deadlineDate - currentDate;
+      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
+
+      if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
+        return 'deadline-urgent';
+      } else if (deadlineDate < currentDate) {
+        return 'deadline-overdue';
+      }
+      return 'deadline-future';
+    },
+
     getTodos() {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -167,10 +174,10 @@ export default {
       }).then(data => {
         this.uncomptodos = data.map(todo => ({
           ...todo,
-          status: this.getTodoStatus(todo.date)  // 根据截止日期设置状态
+          status: this.getTodoStatus(todo.date)
         }));
         this.sortTodos();
-      }).catch(error => console.error('Error fetching todos:', error));
+      }).catch(error => console.error('获取待办失败:', error));
 
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -197,49 +204,45 @@ export default {
       }).then(data => {
         this.comptodos = data.map(todo => ({
           ...todo,
-          status: '已完成'  // 已完成的待办直接设置为已完成
+          status: '已完成'
         }));
         this.sortTodos();
-      }).catch(error => console.error('Error fetching todos:', error));
+      }).catch(error => console.error('获取待办失败:', error));
+      this.checkTodosStatus();
     },
 
     getTodoStatus(date) {
       const currentDate = new Date();
       const deadlineDate = new Date(date);
-      const timeDifference = deadlineDate - currentDate; // 计算截止日期与当前时间的差值
-      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3天的毫秒数
+      const timeDifference = deadlineDate - currentDate;
+      const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
 
       if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
-        return '较紧迫';  // 如果截止日期在未来 3 天内，返回“较紧迫”
+        return '较紧迫';
       } else if (deadlineDate < currentDate) {
-        return '已逾期';  // 如果截止日期已过去，返回“已逾期”
+        return '已逾期';
       } else {
-        return '在将来';  // 否则返回“在将来”
+        return '在将来';
       }
     },
 
-    // 定时检查未完成待办的状态
     checkTodosStatus() {
       const currentDate = new Date();
       this.uncomptodos.forEach(todo => {
         const deadlineDate = new Date(todo.date);
-        const timeDifference = deadlineDate - currentDate; // 计算截止日期与当前时间的差值
-        const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000; // 3天的毫秒数
+        const timeDifference = deadlineDate - currentDate;
+        const threeDaysInMillis = 3 * 24 * 60 * 60 * 1000;
 
         if (timeDifference <= threeDaysInMillis && timeDifference > 0) {
-          // 截止日期在未来3天内，设置为“较紧迫”
           todo.status = '较紧迫';
         } else if (deadlineDate < currentDate && todo.status !== '已逾期') {
-          // 截止日期已过，设置为“已逾期”
           todo.status = '已逾期';
         } else if (deadlineDate > currentDate && todo.status !== '较紧迫') {
-          // 截止日期在未来且不在3天内，设置为“在将来”
           todo.status = '在将来';
         }
       });
     },
 
-    // Method to sort todos by priority
     sortTodos() {
       if (this.sortMethod === 'priority') {
         this.uncomptodos = this.sortTodosByPriorityAndDate(this.uncomptodos);
@@ -250,33 +253,33 @@ export default {
       }
     },
 
-    // Method to sort todos by priority
     sortTodosByPriorityAndDate(todos) {
       const priorityOrder = { '高': 3, '中': 2, '低': 1 };
       return todos.sort((a, b) => {
         const priorityComparison = priorityOrder[b.priority] - priorityOrder[a.priority];
         if (priorityComparison !== 0) return priorityComparison;
-        return new Date(a.date) - new Date(b.date); // 如果优先级相同，按日期排序
+        return new Date(a.date) - new Date(b.date);
       });
     },
 
-    // Method to sort todos by deadline (date)
     sortTodosByDateAndPriority(todos) {
       return todos.sort((a, b) => {
         const dateComparison = new Date(a.date) - new Date(b.date);
         if (dateComparison !== 0) return dateComparison;
         const priorityOrder = { '高': 3, '中': 2, '低': 1 };
-        return priorityOrder[b.priority] - priorityOrder[a.priority]; // 如果日期相同，按优先级排序
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
       });
     },
 
-    // Method to delete a todo by its ID
     deleteTodo(id) {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
         alert('登录状态已超时，请重新登录！');
         store.dispatch('logout');
         this.$router.push('/login');
+        return;
+      }
+      if (!confirm('确定要删除这个待办吗？此操作无法撤销！')) {
         return;
       }
       const url = new URL(serverURL + `/todo/${id}`);
@@ -296,12 +299,11 @@ export default {
             return res.text();
           })
           .then(data => {
-            this.getTodos();  // Refresh the list after deletion
+            this.getTodos();
           })
-          .catch(error => console.error('Error deleting todo:', error));
+          .catch(error => console.error('删除待办失败:', error));
     },
 
-    // Method to toggle the completion status of a todo
     toggleCompletion(todo) {
       store.dispatch('verifyToken');
       if (!store.state.isTokenValid) {
@@ -327,9 +329,9 @@ export default {
             return res.json();
           })
           .then(data => {
-            this.getTodos();  // Refresh the list after update
+            this.getTodos();
           })
-          .catch(error => console.error('Error updating todo:', error));
+          .catch(error => console.error('更新待办失败:', error));
     },
 
     priorityClass(priority) {
@@ -351,9 +353,8 @@ export default {
   },
 
   mounted() {
-    this.getTodos();  // Fetch todos when component is mounted
+    this.getTodos();
 
-    // 每分钟检查一次状态
     setInterval(() => {
       this.checkTodosStatus();
     }, 60000);

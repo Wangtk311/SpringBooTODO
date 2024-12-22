@@ -11,15 +11,14 @@ export default {
 </script>
 
 <style>
-/* Ensure html and body take full height */
 html, body {
-  height: 100%; /* Ensure html and body take full height */
-  margin: 0; /* Remove default margin */
+  height: 100%;
+  margin: 0;
 }
 
 #app {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
 }
 </style>

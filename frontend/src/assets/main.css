@@ -1,8 +1,5 @@
-/* Import base styles */
 @import './base.css';
 
-/* General application container */
-/* Ensure #app uses flexbox layout */
 #app {
   display: flex;
   flex-direction: column;
@@ -12,20 +9,17 @@
   padding: 0;
 }
 
-/* Full-width container styles */
 .full-width-container {
   width: 100%; 
   padding: 1rem; 
   box-sizing: border-box; 
 }
 
-/* Ensure table spans full width */
 .table {
   width: 100%; 
   margin-top: 1rem; 
 }
 
-/* Link and green class styles */
 a,
 .green {
   text-decoration: none;
@@ -34,19 +28,16 @@ a,
   padding: 3px; 
 }
 
-/* Navbar styling */
 .full-width-navbar {
   width: 100%; 
 }
 
-/* Styling for the container within the full-width navbar */
 .full-width-navbar .container-fluid {
   padding: 0; 
   width: 100%; 
   max-width: none; 
 }
 
-/* Media query for larger screens */
 @media (min-width: 1024px) {
   body {
     display: flex;
@@ -63,7 +54,6 @@ a,
   }
 }
 
-/* Ensure that body and html have no overflow issues */
 html, body {
   height: 100%; 
   margin: 0; 

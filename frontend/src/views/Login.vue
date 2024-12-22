@@ -19,28 +19,21 @@
 </template>
 
 <script setup>
-// 引入 Vuex store
 import { useStore } from 'vuex'
 import { ref } from 'vue'
 
-// 获取 Vuex store
 const store = useStore()
-
-// 定义表单输入字段
 const id = ref('')
 const password = ref('')
 
-// 登录处理函数
 const login = async () => {
   if (!id.value || !password.value) {
     alert('账号或密码不能为空');
     return;
   }
 
-  // 调用 Vuex 的 login action 进行登录
   await store.dispatch('login', { id: id.value, password: password.value });
 
-  // 登录成功后可以进行跳转或其他操作
   if (store.getters.isAuthorized) {
     window.location.href = '/';
   } else {
@@ -48,9 +41,7 @@ const login = async () => {
   }
 }
 
-// 注册处理函数
 const register = () => {
-  // 跳转到注册页面
   window.location.href = '/register';
 }
 </script>
